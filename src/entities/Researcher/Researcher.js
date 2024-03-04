@@ -233,6 +233,7 @@ import GetManufacturerLogs from "./GetManufacturerLogs.js";
 
 import GetDistributorLogs from "./GetDistributorLogs.js";
 
+import FetchResult from "./FetchResult.js";
 // import ViewMedicines from "./ViewMedicines.js";
 
 // import routes from './ownerRoutes.js';
@@ -259,6 +260,13 @@ const routes = [
     name: "Get Distributor logs",
     icon: ViewItem,
     component: GetDistributorLogs,
+    layout: "/researcher",
+  },
+  {
+    path: "/fetch-result",
+    name: "Fetch Result logs",
+    icon: ViewItem,
+    component: FetchResult,
     layout: "/researcher",
   },
   // {
