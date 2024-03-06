@@ -82,6 +82,46 @@ const distributorLogSchema = new mongoose.Schema({
   },
 });
 
+// Schema for Drug Recall Recommendation
+const drugRecallSchema = new mongoose.Schema({
+  researcherId: {
+    type: String,
+    required: true,
+  },
+  drugName: {
+    type: String,
+    required: true,
+  },
+  manufacturer: {
+    type: String,
+    required: true,
+  },
+  batchNumbers: {
+    type: [String],
+    required: true,
+  },
+  reasonForRecall: {
+    type: String,
+    required: true,
+  },
+  evidence: {
+    type: String,
+    required: true,
+  },
+  recommendationDate: {
+    type: Date,
+    default: Date.now,
+  },
+  status: {
+    type: String,
+    enum: ["Pending", "Approved", "Rejected"],
+    default: "Pending",
+  },
+});
+
+// Model for Drug Recall Recommendation
+const DrugRecall = mongoose.model("DrugRecall", drugRecallSchema);
+
 const DistributorLog = mongoose.model("DistributorLog", distributorLogSchema);
 
 const MedicineProductionLog = mongoose.model(
@@ -91,4 +131,9 @@ const MedicineProductionLog = mongoose.model(
 
 const SideEffects = mongoose.model("SideEffects", sideEffectsSchema);
 
-module.exports = { SideEffects, MedicineProductionLog, DistributorLog };
+module.exports = {
+  SideEffects,
+  MedicineProductionLog,
+  DistributorLog,
+  DrugRecall,
+};

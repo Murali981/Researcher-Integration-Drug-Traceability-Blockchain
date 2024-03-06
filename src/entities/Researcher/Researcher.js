@@ -234,6 +234,9 @@ import GetManufacturerLogs from "./GetManufacturerLogs.js";
 import GetDistributorLogs from "./GetDistributorLogs.js";
 
 import FetchResult from "./FetchResult.js";
+
+import SubmitDrugRecall from "./SubmitDrugRecall.js";
+
 // import ViewMedicines from "./ViewMedicines.js";
 
 // import routes from './ownerRoutes.js';
@@ -267,6 +270,13 @@ const routes = [
     name: "Fetch Result logs",
     icon: ViewItem,
     component: FetchResult,
+    layout: "/researcher",
+  },
+  {
+    path: "/submit-drug-recall",
+    name: "Submit drug recall",
+    icon: ViewItem,
+    component: SubmitDrugRecall,
     layout: "/researcher",
   },
   // {

@@ -9,12 +9,14 @@ import Button from "@material-ui/core/Button";
 import Typography from "@material-ui/core/Typography";
 import { Grid } from "@material-ui/core";
 
-import Owner from "../images/admin.jpg";
+import FSSAI from "../images/FSSAI.jpg";
 import Distributer from "../images/distributor.jpg";
 import Supplier from "../images/Supplier.jpg";
 import Manufacturer from "../images/manufactuer1.jpg";
 import Transporter from "../images/transporter1.jpg";
 import Wholesaler from "../images/Wholesaler.jpg";
+import Researcher from "../images/Researcher.jpg";
+import Patient from "../images/Patient.jpg";
 
 import SignIn from "../login/SignIn";
 import { BrowserRouter as Router, NavLink } from "react-router-dom";
@@ -77,8 +79,8 @@ function Cards() {
             <CardActionArea>
               <CardMedia
                 className={classes.media}
-                image={Owner}
-                title="Owner"
+                image={FSSAI}
+                title="FSSAI"
               />
               <CardContent>
                 <Typography gutterBottom variant="h5" component="h2">
@@ -214,8 +216,8 @@ function Cards() {
             <CardActionArea>
               <CardMedia
                 className={classes.media}
-                image={Transporter}
-                title="Transporter"
+                image={Patient}
+                title="Patient"
               />
               <CardContent>
                 <Typography gutterBottom variant="h5" component="h2">
@@ -236,8 +238,8 @@ function Cards() {
             <CardActionArea>
               <CardMedia
                 className={classes.media}
-                image={Owner}
-                title="Owner"
+                image={Researcher}
+                title="Researcher"
               />
               <CardContent>
                 <Typography gutterBottom variant="h5" component="h2">

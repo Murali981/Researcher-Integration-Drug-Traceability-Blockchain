@@ -194,6 +194,8 @@ import AddItem from "@material-ui/icons/AddBox";
 import ViewItem from "@material-ui/icons/ViewList";
 import ViewTrans from "@material-ui/icons/Visibility";
 
+import ViewDrugRecalls from "./ViewDrugRecalls.js";
+
 import AddNewUser from "./AddNewUser";
 import ViewUser from "./ViewUser";
 import OwnerDashboard from "../../main_dashboard/views/Dashboard/Dashboard";
@@ -219,6 +221,13 @@ const routes = [
     name: "View User",
     icon: ViewItem,
     component: ViewUser,
+    layout: "/owner",
+  },
+  {
+    path: "/view-drug-recalls",
+    name: "View Drug Recalls",
+    icon: ViewItem,
+    component: ViewDrugRecalls,
     layout: "/owner",
   },
 ];
@@ -302,7 +311,7 @@ export default function Owner({ ...rest }) {
     <div className={classes.wrapper}>
       <Sidebar
         routes={routes}
-        logoText={"Owner"}
+        logoText={"FSSAI"}
         logo={logo}
         image={image}
         handleDrawerToggle={handleDrawerToggle}

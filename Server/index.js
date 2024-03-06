@@ -1,4 +1,9 @@
-const { SideEffects, MedicineProductionLog, DistributorLog } = require("../db");
+const {
+  SideEffects,
+  MedicineProductionLog,
+  DistributorLog,
+  DrugRecall,
+} = require("../db");
 
 const express = require("express");
 
@@ -128,6 +133,49 @@ app.get("/getDistributorLogs", async (req, res) => {
   try {
     const logs = await DistributorLog.find();
     res.status(200).json(logs);
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ error: "Internal Server Error" });
+  }
+});
+
+// Endpoint for Researcher to Submit Drug Recall Recommendation
+app.post("/submitDrugRecall", async (req, res) => {
+  const {
+    researcherId,
+    drugName,
+    manufacturer,
+    batchNumbers,
+    reasonForRecall,
+    evidence,
+  } = req.body;
+
+  // Create a new DrugRecall instance
+  const drugRecall = new DrugRecall({
+    researcherId,
+    drugName,
+    manufacturer,
+    batchNumbers,
+    reasonForRecall,
+    evidence,
+  });
+
+  try {
+    // Save the DrugRecall recommendation to the database
+    await drugRecall.save();
+    res
+      .status(200)
+      .json({ message: "Drug Recall Recommendation submitted successfully." });
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ error: "Internal Server Error" });
+  }
+});
+
+app.get("/getDrugRecalls", async (req, res) => {
+  try {
+    const recalls = await DrugRecall.find();
+    res.status(200).json(recalls);
   } catch (error) {
     console.error(error);
     res.status(500).json({ error: "Internal Server Error" });
