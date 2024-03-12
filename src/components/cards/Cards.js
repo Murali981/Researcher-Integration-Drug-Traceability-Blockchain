@@ -22,39 +22,39 @@ import SignIn from "../login/SignIn";
 import { BrowserRouter as Router, NavLink } from "react-router-dom";
 
 const useStyles = makeStyles({
-  root1: {
-    maxWidth: 350,
-    marginLeft: 30,
-    marginBottom: 10,
-    marginTop: 10,
+  root: {
+    maxWidth: 450,
+    marginLeft: 20,
+    marginBottom: 15,
+    marginTop: 15,
   },
-  root2: {
-    marginTop: 10,
-    marginBottom: 10,
-    maxWidth: 350,
-    marginLeft: 30,
-  },
-  root3: {
-    marginTop: 10,
-    marginBottom: 10,
-    maxWidth: 350,
-    marginLeft: 30,
-  },
-  root4: {
-    marginBottom: 10,
-    maxWidth: 350,
-    marginLeft: 30,
-  },
-  root5: {
-    marginBottom: 10,
-    maxWidth: 350,
-    marginLeft: 30,
-  },
-  root6: {
-    marginBottom: 10,
-    maxWidth: 350,
-    marginLeft: 30,
-  },
+  // root: {
+  //   marginTop: 10,
+  //   marginBottom: 10,
+  //   maxWidth: 350,
+  //   marginLeft: 30,
+  // },
+  // root: {
+  //   marginTop: 10,
+  //   marginBottom: 10,
+  //   maxWidth: 350,
+  //   marginLeft: 30,
+  // },
+  // root: {
+  //   marginBottom: 10,
+  //   maxWidth: 350,
+  //   marginLeft: 30,
+  // },
+  // root: {
+  //   marginBottom: 10,
+  //   maxWidth: 350,
+  //   marginLeft: 30,
+  // },
+  // root: {
+  //   marginBottom: 10,
+  //   maxWidth: 350,
+  //   marginLeft: 30,
+  // },
   media: {
     height: 280,
     paddingLeft: 20,
@@ -75,7 +75,7 @@ function Cards() {
     <Router>
       <Grid container>
         <Grid item md={4}>
-          <Card className={classes.root1}>
+          <Card className={classes.root}>
             <CardActionArea>
               <CardMedia
                 className={classes.media}
@@ -101,7 +101,7 @@ function Cards() {
         </Grid>
 
         <Grid item md={4}>
-          <Card className={classes.root2}>
+          <Card className={classes.root}>
             <CardActionArea>
               <CardMedia
                 className={classes.media}
@@ -123,7 +123,7 @@ function Cards() {
         </Grid>
 
         <Grid item md={4}>
-          <Card className={classes.root3}>
+          <Card className={classes.root}>
             <CardActionArea>
               <CardMedia
                 className={classes.media}
@@ -146,7 +146,7 @@ function Cards() {
 
         <br />
         <Grid item md={4}>
-          <Card className={classes.root4}>
+          <Card className={classes.root}>
             <CardActionArea>
               <CardMedia
                 className={classes.media}
@@ -168,7 +168,7 @@ function Cards() {
         </Grid>
 
         <Grid item md={4}>
-          <Card className={classes.root5}>
+          <Card className={classes.root}>
             <CardActionArea>
               <CardMedia
                 className={classes.media}
@@ -190,7 +190,7 @@ function Cards() {
         </Grid>
 
         <Grid item md={4}>
-          <Card className={classes.root6}>
+          <Card className={classes.root}>
             <CardActionArea>
               <CardMedia
                 className={classes.media}
@@ -212,7 +212,7 @@ function Cards() {
         </Grid>
 
         <Grid item md={4}>
-          <Card className={classes.root3}>
+          <Card className={classes.root}>
             <CardActionArea>
               <CardMedia
                 className={classes.media}
@@ -234,7 +234,7 @@ function Cards() {
         </Grid>
 
         <Grid item md={4}>
-          <Card className={classes.root1}>
+          <Card className={classes.root}>
             <CardActionArea>
               <CardMedia
                 className={classes.media}

@@ -11,6 +11,7 @@ import './MedicineW_D.sol';
 // import './Wholesaler.sol';
 import './MedicineD_C.sol';
 // import './Distributor.sol';
+
 // import './Customer.sol';
 // import './SideEffectsContract.sol';
 // import './ResearcherContract.sol';
@@ -81,15 +82,15 @@ contract SupplyChain {
     event respondEvent(address indexed buyer, address seller, address packageAddr, bytes signature, uint indexed timestamp);
     event sendEvent(address seller, address buyer, address indexed packageAddr, bytes signature, uint indexed timestamp);
     event receivedEvent(address indexed buyer, address seller, address packageAddr, bytes signature, uint indexed timestamp);
-    event SideEffectsReported(
-        address indexed PatientAddress,
-        uint indexed MedicineId,
-        uint Age,
-        string Gender,
-        string Location,
-        string SideEffectsDescription,
-        string PastDiseases
-    );
+    // event SideEffectsReported(
+    //     address indexed PatientAddress,
+    //     uint indexed MedicineId,
+    //     uint Age,
+    //     string Gender,
+    //     string Location,
+    //     string SideEffectsDescription,
+    //     string PastDiseases
+    // );
     
     
     //////////////// Event functions (All entities) ////////////////////
@@ -213,26 +214,26 @@ contract SupplyChain {
     
     
     ///////////////  Manufacturer ///////////////
-  struct MedicineProductionLog {
-        uint medicineId;
-        string medicineDescription; // Added medicine description
-        uint quantityProduced;
-        uint rawMaterialId;
-        string rawMaterialDescription; // Added raw material description
-        string qualityAssuranceReports; // Added quality assurance reports
-        string testResults; // Added test results
-        string manufacturerInfo; // Added manufacturer information
-        string transactionLogs; // Added transaction logs
-        // Additional relevant details
-    }
+//   struct MedicineProductionLog {
+//         uint medicineId;
+//         string medicineDescription; // Added medicine description
+//         uint quantityProduced;
+//         uint rawMaterialId;
+//         string rawMaterialDescription; // Added raw material description
+//         string qualityAssuranceReports; // Added quality assurance reports
+//         string testResults; // Added test results
+//         string manufacturerInfo; // Added manufacturer information
+//         string transactionLogs; // Added transaction logs
+//         // Additional relevant details
+//     }
 
     
     mapping (address => address[]) public manufacturerRawMaterials;
     mapping (address => address[]) public manufacturerMedicines;
 
-   // Mapping to store Medicine Production Logs
-    mapping(uint => MedicineProductionLog) public medicineProductionLogs;
-    uint public totalProductionLogs;
+//    // Mapping to store Medicine Production Logs
+//     mapping(uint => MedicineProductionLog) public medicineProductionLogs;
+//     uint public totalProductionLogs;
 
 
    // Event for Medicine Production Log

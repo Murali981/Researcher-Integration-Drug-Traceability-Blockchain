@@ -26,7 +26,7 @@ function Header() {
   return (
     <div>
       <div className={classes.root}>
-        <AppBar position="static" style={{ background: "" }}>
+        <AppBar position="static" style={{ backgroundColor: "green" }}>
           <Toolbar>
             <IconButton
               edge="start"
