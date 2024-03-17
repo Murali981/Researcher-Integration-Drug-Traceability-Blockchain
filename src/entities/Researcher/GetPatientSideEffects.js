@@ -311,14 +311,97 @@
 
 // export default GetPatientSideEffects;
 
+// import React, { useState, useEffect, useCallback } from "react";
+
+// const GetPatientSideEffects = ({ account, supplyChain, web3 }) => {
+//   const [reports, setReports] = useState([]);
+
+//   const fetchReports = useCallback(async () => {
+//     try {
+//       // Replace the URL with the endpoint where your server is hosted
+//       const response = await fetch(
+//         "http://localhost:5000/getSideEffectsReports"
+//       );
+//       const data = await response.json();
+
+//       console.log("Fetched Reports:", data);
+
+//       setReports(data);
+//     } catch (error) {
+//       console.error("Error fetching reports:", error);
+//     }
+//   }, []);
+
+//   useEffect(() => {
+//     fetchReports();
+//   }, [fetchReports]);
+
+//   console.log("Reports:", reports);
+
+//   return (
+//     <div>
+//       <h1>Side Effects Reports</h1>
+//       <ul>
+//         {reports.map((report, index) => (
+//           <li key={index}>
+//             {/* Display report details here, use report.medicineId, report.age, etc. */}
+//             <p>Medicine ID: {report.medicineId}</p>
+//             <p>Age: {report.age}</p>
+//             <p>Gender: {report.gender}</p>
+//             <p>Location: {report.location}</p>
+//             <p>Side Effects Description: {report.sideEffectsDescription}</p>
+//             <p>Past Diseases: {report.pastDiseases}</p>
+//           </li>
+//         ))}
+//       </ul>
+//     </div>
+//   );
+// };
+
+// export default GetPatientSideEffects;
+
 import React, { useState, useEffect, useCallback } from "react";
+import styled from "styled-components";
+
+const ReportsContainer = styled.div`
+  max-width: 800px;
+  margin: 50px auto;
+  background-color: #f5f5f5;
+  padding: 20px;
+  border-radius: 10px;
+  box-shadow: 0 0 20px rgba(0, 0, 0, 0.1);
+`;
+
+const ReportsList = styled.ul`
+  list-style: none;
+  padding: 0;
+`;
+
+const ReportItem = styled.li`
+  margin-bottom: 20px;
+  padding: 15px;
+  background-color: #ffffff;
+  border-radius: 10px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  transition: transform 0.3s ease-in-out;
+
+  &:hover {
+    transform: scale(1.02);
+  }
+`;
+
+const ReportText = styled.p`
+  margin: 0;
+  font-size: 16px;
+  color: #333;
+  line-height: 1.6;
+`;
 
 const GetPatientSideEffects = ({ account, supplyChain, web3 }) => {
   const [reports, setReports] = useState([]);
 
   const fetchReports = useCallback(async () => {
     try {
-      // Replace the URL with the endpoint where your server is hosted
       const response = await fetch(
         "http://localhost:5000/getSideEffectsReports"
       );
@@ -339,22 +422,33 @@ const GetPatientSideEffects = ({ account, supplyChain, web3 }) => {
   console.log("Reports:", reports);
 
   return (
-    <div>
+    <ReportsContainer>
       <h1>Side Effects Reports</h1>
-      <ul>
+      <ReportsList>
         {reports.map((report, index) => (
-          <li key={index}>
-            {/* Display report details here, use report.medicineId, report.age, etc. */}
-            <p>Medicine ID: {report.medicineId}</p>
-            <p>Age: {report.age}</p>
-            <p>Gender: {report.gender}</p>
-            <p>Location: {report.location}</p>
-            <p>Side Effects Description: {report.sideEffectsDescription}</p>
-            <p>Past Diseases: {report.pastDiseases}</p>
-          </li>
+          <ReportItem key={index}>
+            <ReportText>
+              <b>Medicine ID:</b> {report.medicineId}
+            </ReportText>
+            <ReportText>
+              <b>Age:</b> {report.age}
+            </ReportText>
+            <ReportText>
+              <b>Gender:</b> {report.gender}
+            </ReportText>
+            <ReportText>
+              <b>Location:</b> {report.location}
+            </ReportText>
+            <ReportText>
+              <b>Side Effects Description:</b> {report.sideEffectsDescription}
+            </ReportText>
+            <ReportText>
+              <b>Past Diseases:</b> {report.pastDiseases}
+            </ReportText>
+          </ReportItem>
         ))}
-      </ul>
-    </div>
+      </ReportsList>
+    </ReportsContainer>
   );
 };
 
