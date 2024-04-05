@@ -1,326 +1,152 @@
-// // React component to display side effects reports
-// import React, { useState, useEffect } from "react";
-// import { getSideEffectsReport } from "../../contracts/SupplyChain"; // Import the function to interact with the smart contract
+// import React, { useState, useEffect, useCallback } from "react";
+// import styled from "styled-components";
 
-// const GetPatientSideEffects = () => {
-//   const [reports, setReports] = useState([]);
+// const ReportsContainer = styled.div`
+//   max-width: 800px;
+//   margin: 50px auto;
+//   background-color: #f5f5f5;
+//   padding: 20px;
+//   border-radius: 10px;
+//   box-shadow: 0 0 20px rgba(0, 0, 0, 0.1);
+// `;
 
-//   useEffect(() => {
-//     // Implement logic to fetch side effects reports from the blockchain
-//     const fetchReports = async () => {
-//       const totalReports = await getTotalSideEffectsReports(); // Implement this function
-//       const reportsArray = [];
+// const ReportsList = styled.ul`
+//   list-style: none;
+//   padding: 0;
+// `;
 
-//       for (let i = 0; i < totalReports; i++) {
-//         const report = await getSideEffectsReport(i);
-//         reportsArray.push(report);
-//       }
+// const ReportItem = styled.li`
+//   margin-bottom: 20px;
+//   padding: 15px;
+//   background-color: #ffffff;
+//   border-radius: 10px;
+//   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+//   transition: transform 0.3s ease-in-out;
 
-//       setReports(reportsArray);
-//     };
+//   &:hover {
+//     transform: scale(1.02);
+//   }
+// `;
 
-//     fetchReports();
-//   }, []); // Run this effect only once
-
-//   return (
-//     <div>
-//       <h1>Side Effects Reports</h1>
-//       <ul>
-//         {reports.map((report, index) => (
-//           <li key={index}>
-//             <p>Patient Address: {report.patientAddress}</p>
-//             <p>Medicine ID: {report.medicineId}</p>
-//             {/* Include other report details here */}
-//           </li>
-//         ))}
-//       </ul>
-//     </div>
-//   );
-// };
-
-// export default GetPatientSideEffects;
-
-// React component to display side effects reports
-// import React, { useState, useEffect } from "react";
-// import {
-//   getSideEffectsReports,
-//   SideEffectsReportedEvent,
-// } from "../../../testing"; // Import the function to interact with the smart contract
-
-// const GetPatientSideEffects = () => {
-//   const [reports, setReports] = useState([]);
-
-//   useEffect(() => {
-//     // Implement logic to fetch side effects reports from the blockchain
-//     const fetchReports = async () => {
-//       const sideEffectsReports = await getSideEffectsReports(); // Implement this function
-
-//       // Listen for SideEffectsReported events to update the UI in real-time
-//       const eventListener = SideEffectsReportedEvent().on("data", (event) => {
-//         const newReport = event.returnValues;
-//         setReports((prevReports) => [...prevReports, newReport]);
-//       });
-
-//       setReports(sideEffectsReports);
-
-//       return () => {
-//         // Cleanup event listener when component unmounts
-//         eventListener.unsubscribe();
-//       };
-//     };
-
-//     fetchReports();
-//   }, []); // Run this effect only once
-
-//   return (
-//     <div style={{ margin: "20px" }}>
-//       <h1>Side Effects Reports</h1>
-//       <ul style={{ listStyle: "none", padding: 0 }}>
-//         {reports.map((report, index) => (
-//           <li
-//             key={index}
-//             style={{
-//               border: "1px solid #ddd",
-//               padding: "10px",
-//               marginBottom: "10px",
-//               borderRadius: "5px",
-//             }}
-//           >
-//             <p>
-//               <strong>Patient Address:</strong> {report.patientAddress}
-//             </p>
-//             <p>
-//               <strong>Medicine ID:</strong> {report.medicineId}
-//             </p>
-//             <p>
-//               <strong>Age:</strong> {report.age}
-//             </p>
-//             <p>
-//               <strong>Gender:</strong> {report.gender}
-//             </p>
-//             <p>
-//               <strong>Location:</strong> {report.location}
-//             </p>
-//             <p>
-//               <strong>Side Effects Description:</strong>{" "}
-//               {report.sideEffectsDescription}
-//             </p>
-//             <p>
-//               <strong>Past Diseases:</strong> {report.pastDiseases}
-//             </p>
-//           </li>
-//         ))}
-//       </ul>
-//     </div>
-//   );
-// };
-
-// export default GetPatientSideEffects;
+// const ReportText = styled.p`
+//   margin: 0;
+//   font-size: 16px;
+//   color: #333;
+//   line-height: 1.6;
+// `;
 
 // const GetPatientSideEffects = ({ account, supplyChain, web3 }) => {
-//   const [reports, setReports] = useState([]);
-
-//   // Wrap fetchReports in useCallback
-//   const fetchReports = useCallback(async () => {
-//     const totalReports = await supplyChain.methods.totalReports().call();
-//     const reportsArray = [];
-//     for (let i = 1; i <= totalReports; i++) {
-//       const report = await supplyChain.methods.getSideEffectsReport(i).call();
-//       reportsArray.push(report);
-//     }
-//     setReports(reportsArray);
-//   }, [supplyChain.methods]);
-
-//   useEffect(() => {
-//     // Subscribe to SideEffectsReported events to update the UI in real-time
-//     const eventListener = supplyChain.events
-//       .SideEffectsReported({ fromBlock: "latest" })
-//       .on("data", (event) => {
-//         const newReport = event.returnValues;
-//         setReports((prevReports) => [...prevReports, newReport]);
-//       });
-
-//     fetchReports();
-
-//     return () => {
-//       // Cleanup event listener when component unmounts
-//       eventListener.unsubscribe();
-//     };
-//   }, [account, fetchReports, web3]);
-
-//   const reportSideEffects = async (
-//     medicineId,
-//     age,
-//     gender,
-//     location,
-//     sideEffectsDescription,
-//     pastDiseases
-//   ) => {
-//     // Use web3 to send a transaction to report side effects
-//     await supplyChain.methods
-//       .reportSideEffects(
-//         medicineId,
-//         age,
-//         gender,
-//         location,
-//         sideEffectsDescription,
-//         pastDiseases
-//       )
-//       .send({ from: account });
-
-//     // After reporting, fetch the updated reports
-//     fetchReports();
-//   };
-
-//   return (
-//     <div>
-//       <h1>Side Effects Reports</h1>
-//       <button
-//         onClick={() => reportSideEffects(/* pass necessary parameters */)}
-//       >
-//         Report Side Effects
-//       </button>
-//       <ul>
-//         {reports.map((report, index) => (
-//           <li key={index}>
-//             <p>Patient Address: {report.patientAddress}</p>
-//             <p>Medicine ID: {report.medicineId}</p>
-//             <p>Age: {report.age}</p>
-//             <p>Gender: {report.gender}</p>
-//             <p>Location: {report.location}</p>
-//             <p>Side Effects Description: {report.sideEffectsDescription}</p>
-//             <p>Past Diseases: {report.pastDiseases}</p>
-//           </li>
-//         ))}
-//       </ul>
-//     </div>
-//   );
-// };
-
-// export default GetPatientSideEffects;
-
-// const GetPatientSideEffects = ({ account, supplyChain, web3 }) => {
-//   const [reports, setReports] = useState([]);
-
-//   // Wrap fetchReports in useCallback
-//   const fetchReports = useCallback(async () => {
-//     // Use web3 to get the total reports from the smart contract
-//     const totalReports = await supplyChain.methods.getTotalReports().call();
-
-//     // Use web3 to fetch side effects reports from the blockchain
-//     const reportsArray = [];
-//     for (let i = 1; i <= totalReports; i++) {
-//       const report = await supplyChain.methods.getSideEffectsReport(i).call();
-//       reportsArray.push(report);
-//     }
-
-//     setReports(reportsArray);
-//   }, [supplyChain.methods]); // Add supplyChain.methods as a dependency
-
-//   useEffect(() => {
-//     // Subscribe to SideEffectsReported events to update the UI in real-time
-//     const eventListener = supplyChain.events
-//       .SideEffectsReported({ fromBlock: "latest" })
-//       .on("data", (event) => {
-//         const newReport = event.returnValues;
-//         setReports((prevReports) => [...prevReports, newReport]);
-//       });
-
-//     fetchReports();
-
-//     return () => {
-//       // Cleanup event listener when component unmounts
-//       eventListener.unsubscribe();
-//     };
-//   }, [account, fetchReports, web3, supplyChain.events]); // Add account, fetchReports, and web3 as dependencies
-
-//   return (
-//     <div>
-//       <h1>Side Effects Reports</h1>
-//       <ul>
-//         {reports.map((report, index) => (
-//           <li key={index}>
-//             <p>Patient Address: {report.patientAddress}</p>
-//             <p>Medicine ID: {report.medicineId}</p>
-//             <p>Age: {report.age}</p>
-//             <p>Gender: {report.gender}</p>
-//             <p>Location: {report.location}</p>
-//             <p>Side Effects Description: {report.sideEffectsDescription}</p>
-//             <p>Past Diseases: {report.pastDiseases}</p>
-//           </li>
-//         ))}
-//       </ul>
-//     </div>
-//   );
-// };
-
-// export default GetPatientSideEffects;
-
-// const GetPatientSideEffects = ({ account, supplyChain, web3 }) => {
-//   console.log(account);
 //   const [reports, setReports] = useState([]);
 
 //   const fetchReports = useCallback(async () => {
 //     try {
-//       const totalReports = await supplyChain.methods.getTotalReports().call();
-//       console.log("Total Reports:", totalReports);
+//       const response = await fetch(
+//         "http://localhost:5000/getSideEffectsReports"
+//       );
+//       const data = await response.json();
 
-//       const reportsArray = [];
-//       for (let i = 1; i <= totalReports; i++) {
-//         const report = await supplyChain.methods.getSideEffectsReport(i).call();
-//         reportsArray.push(report);
-//       }
-//       console.log("Fetched Reports:", reportsArray);
+//       console.log("Fetched Reports:", data);
 
-//       setReports(reportsArray);
+//       setReports(data);
 //     } catch (error) {
 //       console.error("Error fetching reports:", error);
 //     }
-//   }, [supplyChain.methods]);
+//   }, []);
 
 //   useEffect(() => {
 //     fetchReports();
 //   }, [fetchReports]);
 
-//   useEffect(() => {
-//     const eventListener = supplyChain.events
-//       .SideEffectsReported({ fromBlock: "latest" })
-//       .on("data", (event) => {
-//         const newReport = event.returnValues;
-//         setReports((prevReports) => [...prevReports, newReport]);
-//       });
-
-//     return () => {
-//       eventListener.unsubscribe();
-//     };
-//   }, [account, web3, supplyChain.events]);
-
 //   console.log("Reports:", reports);
 
 //   return (
-//     <div>
+//     <ReportsContainer>
 //       <h1>Side Effects Reports</h1>
-//       <ul>
+//       <ReportsList>
 //         {reports.map((report, index) => (
-//           <li key={index}>{/* Display report details here */}</li>
+//           <ReportItem key={index}>
+//             <ReportText>
+//               <b>Medicine ID:</b> {report.medicineId}
+//             </ReportText>
+//             <ReportText>
+//               <b>Age:</b> {report.age}
+//             </ReportText>
+//             <ReportText>
+//               <b>Gender:</b> {report.gender}
+//             </ReportText>
+//             <ReportText>
+//               <b>Location:</b> {report.location}
+//             </ReportText>
+//             <ReportText>
+//               <b>Side Effects Description:</b> {report.sideEffectsDescription}
+//             </ReportText>
+//             <ReportText>
+//               <b>Past Diseases:</b> {report.pastDiseases}
+//             </ReportText>
+//           </ReportItem>
 //         ))}
-//       </ul>
-//     </div>
+//       </ReportsList>
+//     </ReportsContainer>
 //   );
 // };
 
 // export default GetPatientSideEffects;
 
+// Import necessary libraries
 import React, { useState, useEffect, useCallback } from "react";
+import crypto from "crypto";
+import styled from "styled-components";
 
+// Styled components for styling the UI
+const ReportsContainer = styled.div`
+  max-width: 800px;
+  margin: 50px auto;
+  background-color: #f5f5f5;
+  padding: 20px;
+  border-radius: 10px;
+  box-shadow: 0 0 20px rgba(0, 0, 0, 0.1);
+`;
+
+const ReportsList = styled.ul`
+  list-style: none;
+  padding: 0;
+`;
+
+const ReportItem = styled.li`
+  margin-bottom: 20px;
+  padding: 15px;
+  background-color: #ffffff;
+  border-radius: 10px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  transition: transform 0.3s ease-in-out;
+
+  &:hover {
+    transform: scale(1.02);
+  }
+`;
+
+const ReportText = styled.p`
+  margin: 0;
+  font-size: 16px;
+  color: #333;
+  line-height: 1.6;
+`;
+
+// Functional component to fetch and display side effects
 const GetPatientSideEffects = ({ account, supplyChain, web3 }) => {
+  // State to store fetched reports
   const [reports, setReports] = useState([]);
 
+  // Function to fetch side effects reports from the backend
   const fetchReports = useCallback(async () => {
     try {
-      // Replace the URL with the endpoint where your server is hosted
       const response = await fetch(
-        "http://localhost:5000/getSideEffectsReports"
+        "http://localhost:5000/getSideEffectsReports",
+        {
+          headers: {
+            researcher_unique_key: "RESEARCHER_UNIQUE_KEY_HERE", // Replace with actual unique key provided by the researcher
+          },
+        }
       );
       const data = await response.json();
 
@@ -332,30 +158,66 @@ const GetPatientSideEffects = ({ account, supplyChain, web3 }) => {
     }
   }, []);
 
+  // Effect hook to fetch reports when component mounts
   useEffect(() => {
     fetchReports();
   }, [fetchReports]);
 
-  console.log("Reports:", reports);
-
+  // Render the UI with fetched reports
   return (
-    <div>
+    <ReportsContainer>
       <h1>Side Effects Reports</h1>
-      <ul>
+      <ReportsList>
         {reports.map((report, index) => (
-          <li key={index}>
-            {/* Display report details here, use report.medicineId, report.age, etc. */}
-            <p>Medicine ID: {report.medicineId}</p>
-            <p>Age: {report.age}</p>
-            <p>Gender: {report.gender}</p>
-            <p>Location: {report.location}</p>
-            <p>Side Effects Description: {report.sideEffectsDescription}</p>
-            <p>Past Diseases: {report.pastDiseases}</p>
-          </li>
+          <ReportItem key={index}>
+            <ReportText>
+              <b>Medicine ID:</b> {report.medicineId}
+            </ReportText>
+            <ReportText>
+              <b>Age:</b> {report.age}
+            </ReportText>
+            <ReportText>
+              <b>Gender:</b> {report.gender}
+            </ReportText>
+            <ReportText>
+              <b>Location:</b> {report.location}
+            </ReportText>
+            <ReportText>
+              <b>Side Effects Description:</b>{" "}
+              {decryptData(
+                report.sideEffectsDescription,
+                "RESEARCHER_UNIQUE_KEY_HERE"
+              )}{" "}
+              {/* Decrypt side effects */}
+            </ReportText>
+            <ReportText>
+              <b>Past Diseases:</b> {report.pastDiseases}
+            </ReportText>
+          </ReportItem>
         ))}
-      </ul>
-    </div>
+      </ReportsList>
+    </ReportsContainer>
   );
 };
+
+// // Function to decrypt side effects data
+// const decryptData = (encryptedData, key) => {
+//   try {
+//     // Create a decipher object with the same algorithm and key
+//     const decipher = crypto.createDecipheriv("aes-256-cbc", key);
+
+//     // Decrypt the data
+//     let decrypted = decipher.update(encryptedData, "hex", "utf-8");
+//     decrypted += decipher.final("utf-8");
+
+//     return decrypted;
+//   } catch (error) {
+//     console.error("Error decrypting data:", error);
+//     return null;
+//   }
+//   // Decrypt data using the provided key
+//   // Implement decryption logic here
+//   // For example, you can use the same decryption logic used on the server side
+// };
 
 export default GetPatientSideEffects;

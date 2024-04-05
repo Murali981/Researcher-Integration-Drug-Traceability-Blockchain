@@ -197,6 +197,7 @@ import ViewTrans from "@material-ui/icons/Visibility";
 import ViewDrugRecalls from "./ViewDrugRecalls.js";
 
 import AddNewUser from "./AddNewUser";
+import AddResearcher from "./AddResearcher.js";
 import ViewUser from "./ViewUser";
 import OwnerDashboard from "../../main_dashboard/views/Dashboard/Dashboard";
 import UserProfile from "../../main_dashboard/views/UserProfile/UserProfile";
@@ -228,6 +229,13 @@ const routes = [
     name: "View Drug Recalls",
     icon: ViewItem,
     component: ViewDrugRecalls,
+    layout: "/owner",
+  },
+  {
+    path: "/add-researcher",
+    name: "Add Researcher",
+    icon: ViewItem,
+    component: AddResearcher,
     layout: "/owner",
   },
 ];

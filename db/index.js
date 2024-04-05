@@ -1,7 +1,7 @@
 const mongoose = require("mongoose");
 
 mongoose.connect(
-  "mongodb+srv://admin:C37qG4fpCsiu9oxv@subapp.8vlvon1.mongodb.net/Patient",
+  "mongodb+srv://admin:C37qG4fpCsiu9oxv@subapp.8vlvon1.mongodb.net/SideEffects",
   {
     useNewUrlParser: true,
   }
@@ -14,6 +14,17 @@ const sideEffectsSchema = new mongoose.Schema({
   location: String,
   sideEffectsDescription: String,
   pastDiseases: String,
+  iv: String, // Add iv field to store the initialization vector
+  encryptedData: Object, // Add encryptedData field to store the encrypted data
+});
+
+const researcherSchema = new mongoose.Schema({
+  name: String,
+  locationx: String,
+  locationy: String,
+  role: String,
+  address: String, // Storing Ethereum address as a string
+  uniqueKey: String,
 });
 
 const medicineProductionLogSchema = new mongoose.Schema({
@@ -131,9 +142,12 @@ const MedicineProductionLog = mongoose.model(
 
 const SideEffects = mongoose.model("SideEffects", sideEffectsSchema);
 
+const Researcher = mongoose.model("Researcher", researcherSchema);
+
 module.exports = {
   SideEffects,
   MedicineProductionLog,
   DistributorLog,
   DrugRecall,
+  Researcher,
 };

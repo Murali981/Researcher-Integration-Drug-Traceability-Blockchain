@@ -237,6 +237,8 @@ import FetchResult from "./FetchResult.js";
 
 import SubmitDrugRecall from "./SubmitDrugRecall.js";
 
+import GetUniqueKey from "./GetUniqueKey.js";
+
 // import ViewMedicines from "./ViewMedicines.js";
 
 // import routes from './ownerRoutes.js';
@@ -277,6 +279,13 @@ const routes = [
     name: "Submit drug recall",
     icon: ViewItem,
     component: SubmitDrugRecall,
+    layout: "/researcher",
+  },
+  {
+    path: "/get-unique-key",
+    name: "Get unique key",
+    icon: ViewItem,
+    component: GetUniqueKey,
     layout: "/researcher",
   },
   // {
