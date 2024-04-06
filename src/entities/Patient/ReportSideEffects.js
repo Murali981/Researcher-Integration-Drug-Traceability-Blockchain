@@ -402,7 +402,7 @@ export default function ReportSideEffects({ account, supplyChain, web3 }) {
         {
           headers: {
             researcher_unique_key:
-              "f8c8bc31b2ffa4316bf40680a1a455d231cacc8cfbe8bba0938991a5cd74ded6", // Replace with actual unique key
+              "aece8fffc809e438e81d26ec3009c7cfa064103934aebe715213f37c9333c2de", // Replace with actual unique key
           },
         }
       );

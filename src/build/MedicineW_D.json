@@ -84,7 +84,7 @@
   "sourceMap": "83:1392:2:-:0;;;313:323;5:9:-1;2:2;;;27:1;24;17:12;2:2;313:323:2;;;;;;;;;;;;;;;15:3:-1;10;7:12;4:2;;;32:1;29;22:12;4:2;-1:-1;313:323:2;;;;;;;;;;;;;;;459:5;:14;;-1:-1:-1;;;;;;459:14:2;;;-1:-1:-1;;;;;459:14:2;;;;;;;;-1:-1:-1;484:16:2;;;;;;;;;;;;;;511:6;:15;;;;;;;;;;537:11;:25;;;;;;;;;;;;;;573:8;:19;;;;;;;;-1:-1:-1;;;;603:25:2;;;-1:-1:-1;;;;83:1392:2;;;;",
   "deployedSourceMap": "83:1392:2:-:0;;;;5:9:-1;2:2;;;27:1;24;17:12;2:2;83:1392:2;;;;;;;;;;;;;;;;;;;;;;;;;;12:1:-1;9;2:12;646:362:2;;;;;;15:2:-1;10:3;7:11;4:2;;;31:1;28;21:12;4:2;-1:-1;;;;;;646:362:2;;;;;;;;;;:::i;:::-;;1362:108;;;:::i;:::-;;;;;;;;;;;;;;;;1016:338;;;;;;15:2:-1;10:3;7:11;4:2;;;31:1;28;21:12;4:2;-1:-1;;;;;;1016:338:2;;;;;;;;;;:::i;646:362::-;767:11;;-1:-1:-1;;;;;767:27:2;;;:11;;:27;745:124;;;;-1:-1:-1;;;745:124:2;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;880:6;:25;;-1:-1:-1;;;;880:25:2;-1:-1:-1;;;880:25:2;;;;983:6;;918:82;;;-1:-1:-1;;;918:82:2;;-1:-1:-1;;;;;960:8:2;;;918:82;;;;;;;983:6;;;918:82;;;;;:27;;;;-1:-1:-1;;918:82:2;;;;;-1:-1:-1;;918:82:2;;;;;;;-1:-1:-1;918:27:2;:82;;;2:2:-1;;;;27:1;24;17:12;2:2;918:82:2;;;;8:9:-1;5:2;;;45:16;42:1;39;24:38;77:16;74:1;67:27;5:2;918:82:2;;;;646:362;;:::o;1362:108::-;1455:6;;1420:4;;-1:-1:-1;;;1455:6:2;;;;1450:12;;;;;;;;1443:19;;1362:108;:::o;1016:338::-;1148:8;;-1:-1:-1;;;;;1136:20:2;;;1148:8;;1136:20;1114:118;;;;-1:-1:-1;;;1114:118:2;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;1243:6;:25;;-1:-1:-1;;;;1243:25:2;-1:-1:-1;;;1243:25:2;;;1281:65;;;-1:-1:-1;;;1281:65:2;;-1:-1:-1;;;;;1281:65:2;;;;;;;;;;;;:31;;;;;;:65;;;;;-1:-1:-1;;1281:65:2;;;;;;;;-1:-1:-1;1281:31:2;:65;;;2:2:-1;;;;27:1;24;17:12",
   "source": "pragma solidity ^0.6.6;\r\n// pragma solidity ^0.8.0;\r\n\r\nimport './Medicine.sol';\r\n\r\ncontract MedicineW_D {\r\n\r\n    address Owner;\r\n\r\n    enum packageStatus { atcreator, picked, delivered }\r\n\r\n    address medId;\r\n    address sender;\r\n    address transporter;\r\n    address receiver;\r\n    packageStatus status;\r\n\r\n    constructor(\r\n        address _address,\r\n        address Sender,\r\n        address Transporter,\r\n        address Receiver\r\n    ) public {\r\n        Owner = Sender;\r\n        medId = _address;\r\n        sender = Sender;\r\n        transporter = Transporter;\r\n        receiver = Receiver;\r\n        status = packageStatus(0);\r\n    }\r\n\r\n\r\n    function pickWD(\r\n        address _address,\r\n        address _transporter\r\n    ) public {\r\n        require(\r\n            transporter == _transporter,\r\n            \"Only Associated shipper can call this function.\"\r\n        );\r\n        status = packageStatus(1);\r\n\r\n        Medicine(_address).sendWtoD(\r\n            receiver,\r\n            sender\r\n        );\r\n    }\r\n\r\n    function receiveWD(\r\n        address _address,\r\n        address Receiver\r\n    ) public {\r\n        require(\r\n            Receiver == receiver,\r\n            \"Only Associated receiver can call this function.\"\r\n        );\r\n        status = packageStatus(2);\r\n\r\n        Medicine(_address).receivedWtoD(\r\n            Receiver\r\n        );\r\n    }\r\n\r\n    function getBatchIDStatus() public view returns(\r\n        uint\r\n    ) {\r\n        return uint(status);\r\n    }\r\n\r\n}",
-  "sourcePath": "D:\\Researcher-Integration-Drug-Traceability-Blockchain\\testing\\MedicineW_D.sol",
+  "sourcePath": "C:\\Users\\josep\\Desktop\\Researcher-Integration-Drug-Traceability-Blockchain\\testing\\MedicineW_D.sol",
   "ast": {
     "absolutePath": "project:/testing/MedicineW_D.sol",
     "exportedSymbols": {
@@ -3594,11 +3594,7 @@
   },
   "networks": {},
   "schemaVersion": "3.4.16",
-<<<<<<< HEAD
-  "updatedAt": "2024-04-05T10:40:24.853Z",
-=======
-  "updatedAt": "2024-03-16T06:26:30.901Z",
->>>>>>> 99ee45036c583bf1e336d1b9ff256c35229d146d
+  "updatedAt": "2024-04-06T06:30:56.003Z",
   "devdoc": {
     "methods": {}
   },

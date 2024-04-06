@@ -210,48 +210,6 @@ app.post("/reportSideEffects", async (req, res) => {
 });
 
 // Function to encrypt data using a unique key
-// const encryptData = (data, key) => {
-//   const cipher = crypto.createCipheriv("aes-256-cbc", key);
-//   let encrypted = cipher.update(data, "utf-8", "hex");
-//   encrypted += cipher.final("hex");
-//   return encrypted;
-// };
-
-// const encryptData = (data, key) => {
-//   const iv = crypto.randomBytes(16); // Generate a random IV
-//   const cipher = crypto.createCipheriv("aes-256-cbc", key, iv);
-//   let encrypted = cipher.update(data, "utf-8", "hex");
-//   encrypted += cipher.final("hex");
-//   return {
-//     iv: iv.toString("hex"), // Convert IV to string for storage/transfer
-//     encryptedData: encrypted,
-//   };
-// };
-
-// const encryptData = (data, key) => {
-//   // Generate a random IV
-//   const iv = crypto.randomBytes(16);
-
-//   // Ensure key length is correct
-//   const keyLength = 32; // 32 bytes = 256 bits (AES-256)
-//   const adjustedKey = Buffer.alloc(keyLength);
-//   const keyBuffer = Buffer.from(key, "hex");
-//   keyBuffer.copy(adjustedKey);
-
-//   // Create cipher with adjusted key and IV
-//   const cipher = crypto.createCipheriv("aes-256-cbc", adjustedKey, iv);
-
-//   // Perform encryption
-//   let encrypted = cipher.update(data, "utf-8", "hex");
-//   encrypted += cipher.final("hex");
-
-//   // Concatenate IV and encrypted data into a single string
-//   const encryptedData = iv.toString("hex") + encrypted;
-
-//   return encryptedData;
-// };
-
-// Function to encrypt data using a unique key
 // Function to ensure the key length is correct
 const ensureKeyLength = (key) => {
   // Check if the key is a hexadecimal string
@@ -294,123 +252,6 @@ const encryptData = (data, key) => {
   };
 };
 
-// // Function to decrypt data using a unique key
-// const decryptData = (encryptedData, key) => {
-//   const decipher = crypto.createDecipheriv("aes-256-cbc", key);
-//   let decrypted = decipher.update(encryptedData, "hex", "utf-8");
-//   decrypted += decipher.final("utf-8");
-//   return decrypted;
-// };
-
-// app.get("/getSideEffectsReports", async (req, res) => {
-//   try {
-//     const reports = await SideEffects.find();
-//     res.status(200).json(reports);
-//   } catch (error) {
-//     console.error(error);
-//     res.status(500).json({ error: "Internal Server Error" });
-//   }
-// });
-
-// // Route to get side effects reports
-// app.get("/getSideEffectsReports", async (req, res) => {
-//   try {
-//     // Retrieve researcher's unique key from the request header
-//     const researcherUniqueKey = req.headers.researcher_unique_key;
-
-//     // Fetch encrypted side effects from MongoDB
-//     const reports = await SideEffects.find();
-
-//     // Decrypt side effects using researcher's unique key
-//     const decryptedReports = reports.map((report) => ({
-//       ...report._doc,
-//       sideEffectsDescription: decryptData(
-//         report.sideEffectsDescription,
-//         researcherUniqueKey
-//       ),
-//     }));
-
-//     res.status(200).json(decryptedReports);
-//   } catch (error) {
-//     console.error(error);
-//     res.status(500).json({ error: "Internal Server Error" });
-//   }
-// });
-
-// Route to get side effects reports
-// app.get("/getSideEffectsReports", async (req, res) => {
-//   try {
-//     // Retrieve researcher's unique key from the request header
-//     const researcherUniqueKey = req.headers.researcher_unique_key;
-
-//     // Fetch encrypted side effects from MongoDB
-//     const reports = await SideEffects.find();
-
-//     // Decrypt side effects using researcher's unique key
-//     const decryptedReports = reports.map((report) => {
-//       const decryptedData = {};
-
-//       // Decrypt each field in the encryptedData object
-//       Object.entries(report.encryptedData).forEach(([key, value]) => {
-//         decryptedData[key] = decryptData(value, researcherUniqueKey);
-//       });
-
-//       // Construct the final decrypted report object
-//       return {
-//         medicineId: decryptData(
-//           report.encryptedData.medicineId,
-//           researcherUniqueKey
-//         ),
-//         age: decryptData(report.encryptedData.age, researcherUniqueKey),
-//         gender: decryptData(report.encryptedData.gender, researcherUniqueKey),
-//         location: decryptData(
-//           report.encryptedData.location,
-//           researcherUniqueKey
-//         ),
-//         sideEffectsDescription: decryptData(
-//           report.encryptedData.sideEffectsDescription,
-//           researcherUniqueKey
-//         ),
-//         pastDiseases: decryptData(
-//           report.encryptedData.pastDiseases,
-//           researcherUniqueKey
-//         ),
-//       };
-//     });
-
-//     res.status(200).json(decryptedReports);
-//   } catch (error) {
-//     console.error(error);
-//     res.status(500).json({ error: "Internal Server Error" });
-//   }
-// });
-
-// Route to get side effects reports
-// app.get("/getSideEffectsReports", async (req, res) => {
-//   try {
-//     // Retrieve researcher's unique key from the request header
-//     const researcherUniqueKey = req.headers.researcher_unique_key;
-
-//     // Fetch encrypted side effects from MongoDB
-//     const reports = await SideEffects.find();
-
-//     // Decrypt side effects using researcher's unique key
-//     const decryptedReports = reports.map((report) => ({
-//       ...report._doc,
-//       sideEffectsDescription: decryptData(
-//         report.encryptedData,
-//         researcherUniqueKey,
-//         report.iv
-//       ),
-//     }));
-
-//     res.status(200).json(decryptedReports);
-//   } catch (error) {
-//     console.error(error);
-//     res.status(500).json({ error: "Internal Server Error" });
-//   }
-// });
-
 // Route to get side effects reports
 app.get("/getSideEffectsReports", async (req, res) => {
   try {
@@ -428,19 +269,25 @@ app.get("/getSideEffectsReports", async (req, res) => {
       // Check if IV and encrypted data are present
       if (!iv || !encryptedData) {
         return {
-          ...report._doc,
+          _id: report._id,
           sideEffectsDescription: "Error: IV or encrypted data missing",
         };
       }
 
-      return {
-        ...report._doc,
-        sideEffectsDescription: decryptData(
-          encryptedData,
-          researcherUniqueKey,
-          iv
-        ),
-      };
+      const decryptedData = decryptData(encryptedData, researcherUniqueKey, iv);
+
+      // Check if decryption was successful
+      if (decryptedData) {
+        return {
+          _id: report._id,
+          sideEffectsDescription: decryptedData,
+        };
+      } else {
+        return {
+          _id: report._id,
+          sideEffectsDescription: "Error decrypting data",
+        };
+      }
     });
 
     res.status(200).json(decryptedReports);
@@ -450,13 +297,15 @@ app.get("/getSideEffectsReports", async (req, res) => {
   }
 });
 
-// Function to decrypt data using a unique key
 const decryptData = (encryptedData, key, iv) => {
   try {
     // Check if IV is provided
     if (!iv) {
       throw new Error("Initialization vector (IV) is missing.");
     }
+
+    // Ensure the key length is correct
+    key = ensureKeyLengths(key);
 
     // Create a decipher object with the provided IV and key
     const decipher = crypto.createDecipheriv(
@@ -469,10 +318,30 @@ const decryptData = (encryptedData, key, iv) => {
     let decrypted = decipher.update(encryptedData, "hex", "utf-8");
     decrypted += decipher.final("utf-8");
 
-    return decrypted;
+    // Parse the decrypted JSON string into an object
+    const decryptedObject = JSON.parse(decrypted);
+
+    return decryptedObject;
   } catch (error) {
     console.error("Error decrypting data:", error);
     return null;
+  }
+};
+
+// Function to ensure the key length is correct
+const ensureKeyLengths = (key) => {
+  // Check if the key is a hexadecimal string
+  if (/^[0-9a-fA-F]+$/.test(key)) {
+    // If it's a hexadecimal string, convert it to bytes
+    return Buffer.from(key, "hex");
+  } else {
+    // If it's a regular string, check its length
+    if (key.length !== 32) {
+      throw new Error(
+        "Invalid key length. Key must be 32 bytes (256 bits) long."
+      );
+    }
+    return key;
   }
 };
 
