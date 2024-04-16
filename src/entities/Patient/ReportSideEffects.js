@@ -378,6 +378,49 @@ export default function ReportSideEffects({ account, supplyChain, web3 }) {
   console.log(account);
   const classes = useStyles();
 
+  // const [medicineId, setMedicineId] = useState("");
+  // const [age, setAge] = useState("");
+  // const [gender, setGender] = useState("");
+  // const [location, setLocation] = useState("");
+  // const [sideEffectsDescription, setSideEffectsDescription] = useState("");
+  // const [pastDiseases, setPastDiseases] = useState("");
+
+  // const handleSubmit = async (e) => {
+  //   e.preventDefault();
+
+  //   try {
+  //     const response = await axios.post(
+  //       "http://localhost:5000/reportSideEffects",
+  //       {
+  //         medicineId,
+  //         age,
+  //         gender,
+  //         location,
+  //         sideEffectsDescription,
+  //         pastDiseases,
+  //       },
+  //       {
+  //         headers: {
+  //           researcher_unique_key:
+  //             "aece8fffc809e438e81d26ec3009c7cfa064103934aebe715213f37c9333c2de", // Replace with actual unique key
+  //         },
+  //       }
+  //     );
+
+  //     console.log(response.data);
+
+  //     // Reset form fields
+  //     setMedicineId("");
+  //     setAge("");
+  //     setGender("");
+  //     setLocation("");
+  //     setSideEffectsDescription("");
+  //     setPastDiseases("");
+  //   } catch (error) {
+  //     console.error(error);
+  //   }
+  // };
+
   const [medicineId, setMedicineId] = useState("");
   const [age, setAge] = useState("");
   const [gender, setGender] = useState("");
@@ -385,29 +428,52 @@ export default function ReportSideEffects({ account, supplyChain, web3 }) {
   const [sideEffectsDescription, setSideEffectsDescription] = useState("");
   const [pastDiseases, setPastDiseases] = useState("");
 
-  const handleSubmit = async (e) => {
-    e.preventDefault();
+  const jwt =
+    "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySW5mb3JtYXRpb24iOnsiaWQiOiJhNDM0N2YyNi1mMTcxLTRmNWQtYTRhZi0zNzIxNTlmZmQ2ZTIiLCJlbWFpbCI6Impvc2VwaHN0YWxpbjk4MUBnbWFpbC5jb20iLCJlbWFpbF92ZXJpZmllZCI6dHJ1ZSwicGluX3BvbGljeSI6eyJyZWdpb25zIjpbeyJpZCI6IkZSQTEiLCJkZXNpcmVkUmVwbGljYXRpb25Db3VudCI6MX0seyJpZCI6Ik5ZQzEiLCJkZXNpcmVkUmVwbGljYXRpb25Db3VudCI6MX1dLCJ2ZXJzaW9uIjoxfSwibWZhX2VuYWJsZWQiOmZhbHNlLCJzdGF0dXMiOiJBQ1RJVkUifSwiYXV0aGVudGljYXRpb25UeXBlIjoic2NvcGVkS2V5Iiwic2NvcGVkS2V5S2V5IjoiOTNkODRhODEyNTRmNWEzNDA1YTkiLCJzY29wZWRLZXlTZWNyZXQiOiI5MjFlNGY0MGU3Y2QwOWY2ZmVmYzk4OWRkYzE5MGEzNTVkNTg1MzA4Zjc0NzQwNzYwODBhMGJkYWQ0ZjA1NTdjIiwiaWF0IjoxNzEzMjYwMjM3fQ.HTHPkfcYP2tKxMGrh7tQrUmMUqzGahQfZJcOdTUWmPY";
 
+  const handleSubmission = async (e) => {
+    e.preventDefault();
     try {
-      const response = await axios.post(
-        "http://localhost:5000/reportSideEffects",
+      const folder = "report_side_effects"; // Specify the folder name
+
+      const json = {
+        medicineId,
+        age,
+        gender,
+        location,
+        sideEffectsDescription,
+        pastDiseases,
+      };
+
+      const blob = new Blob([JSON.stringify(json, null, 2)], {
+        type: "application/json",
+      });
+      const file = new File([blob], "report.json", {
+        type: "application/json",
+      });
+
+      const formData = new FormData();
+      formData.append("file", file, `${folder}/report.json`);
+
+      const pinataMetadata = JSON.stringify({ name: `${folder}` });
+      console.log(pinataMetadata);
+      formData.append("pinataMetadata", pinataMetadata);
+
+      const res = await fetch(
+        "https://api.pinata.cloud/pinning/pinFileToIPFS",
         {
-          medicineId,
-          age,
-          gender,
-          location,
-          sideEffectsDescription,
-          pastDiseases,
-        },
-        {
+          method: "POST",
           headers: {
-            researcher_unique_key:
-              "aece8fffc809e438e81d26ec3009c7cfa064103934aebe715213f37c9333c2de", // Replace with actual unique key
+            Authorization: `Bearer ${jwt}`,
           },
+          body: formData,
         }
       );
 
-      console.log(response.data);
+      const resData = await res.json();
+      console.log(resData);
+
+      // Optionally, you can call your blockchain function here
 
       // Reset form fields
       setMedicineId("");
@@ -417,7 +483,7 @@ export default function ReportSideEffects({ account, supplyChain, web3 }) {
       setSideEffectsDescription("");
       setPastDiseases("");
     } catch (error) {
-      console.error(error);
+      console.error("Error sending file to IPFS:", error);
     }
   };
 
@@ -429,7 +495,7 @@ export default function ReportSideEffects({ account, supplyChain, web3 }) {
           <Typography component="h1" variant="h5">
             Report Side Effects
           </Typography>
-          <form className={classes.form} noValidate onSubmit={handleSubmit}>
+          <form className={classes.form} noValidate onSubmit={handleSubmission}>
             <Grid container spacing={2}>
               <Grid item xs={12}>
                 <TextField
