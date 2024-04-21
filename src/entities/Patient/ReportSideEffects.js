@@ -344,6 +344,49 @@
 //   );
 // }
 
+// const [medicineId, setMedicineId] = useState("");
+// const [age, setAge] = useState("");
+// const [gender, setGender] = useState("");
+// const [location, setLocation] = useState("");
+// const [sideEffectsDescription, setSideEffectsDescription] = useState("");
+// const [pastDiseases, setPastDiseases] = useState("");
+
+// const handleSubmit = async (e) => {
+//   e.preventDefault();
+
+//   try {
+//     const response = await axios.post(
+//       "http://localhost:5000/reportSideEffects",
+//       {
+//         medicineId,
+//         age,
+//         gender,
+//         location,
+//         sideEffectsDescription,
+//         pastDiseases,
+//       },
+//       {
+//         headers: {
+//           researcher_unique_key:
+//             "aece8fffc809e438e81d26ec3009c7cfa064103934aebe715213f37c9333c2de", // Replace with actual unique key
+//         },
+//       }
+//     );
+
+//     console.log(response.data);
+
+//     // Reset form fields
+//     setMedicineId("");
+//     setAge("");
+//     setGender("");
+//     setLocation("");
+//     setSideEffectsDescription("");
+//     setPastDiseases("");
+//   } catch (error) {
+//     console.error(error);
+//   }
+// };
+
 import React, { useState } from "react";
 import { makeStyles } from "@material-ui/core/styles";
 import TextField from "@material-ui/core/TextField";
@@ -352,7 +395,7 @@ import Grid from "@material-ui/core/Grid";
 import CssBaseline from "@material-ui/core/CssBaseline";
 import Typography from "@material-ui/core/Typography";
 import Container from "@material-ui/core/Container";
-import axios from "axios";
+import SupplyChain from "../../build/SupplyChain.json";
 
 const useStyles = makeStyles((theme) => ({
   paper: {
@@ -378,49 +421,6 @@ export default function ReportSideEffects({ account, supplyChain, web3 }) {
   console.log(account);
   const classes = useStyles();
 
-  // const [medicineId, setMedicineId] = useState("");
-  // const [age, setAge] = useState("");
-  // const [gender, setGender] = useState("");
-  // const [location, setLocation] = useState("");
-  // const [sideEffectsDescription, setSideEffectsDescription] = useState("");
-  // const [pastDiseases, setPastDiseases] = useState("");
-
-  // const handleSubmit = async (e) => {
-  //   e.preventDefault();
-
-  //   try {
-  //     const response = await axios.post(
-  //       "http://localhost:5000/reportSideEffects",
-  //       {
-  //         medicineId,
-  //         age,
-  //         gender,
-  //         location,
-  //         sideEffectsDescription,
-  //         pastDiseases,
-  //       },
-  //       {
-  //         headers: {
-  //           researcher_unique_key:
-  //             "aece8fffc809e438e81d26ec3009c7cfa064103934aebe715213f37c9333c2de", // Replace with actual unique key
-  //         },
-  //       }
-  //     );
-
-  //     console.log(response.data);
-
-  //     // Reset form fields
-  //     setMedicineId("");
-  //     setAge("");
-  //     setGender("");
-  //     setLocation("");
-  //     setSideEffectsDescription("");
-  //     setPastDiseases("");
-  //   } catch (error) {
-  //     console.error(error);
-  //   }
-  // };
-
   const [medicineId, setMedicineId] = useState("");
   const [age, setAge] = useState("");
   const [gender, setGender] = useState("");
@@ -430,6 +430,73 @@ export default function ReportSideEffects({ account, supplyChain, web3 }) {
 
   const jwt =
     "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySW5mb3JtYXRpb24iOnsiaWQiOiJhNDM0N2YyNi1mMTcxLTRmNWQtYTRhZi0zNzIxNTlmZmQ2ZTIiLCJlbWFpbCI6Impvc2VwaHN0YWxpbjk4MUBnbWFpbC5jb20iLCJlbWFpbF92ZXJpZmllZCI6dHJ1ZSwicGluX3BvbGljeSI6eyJyZWdpb25zIjpbeyJpZCI6IkZSQTEiLCJkZXNpcmVkUmVwbGljYXRpb25Db3VudCI6MX0seyJpZCI6Ik5ZQzEiLCJkZXNpcmVkUmVwbGljYXRpb25Db3VudCI6MX1dLCJ2ZXJzaW9uIjoxfSwibWZhX2VuYWJsZWQiOmZhbHNlLCJzdGF0dXMiOiJBQ1RJVkUifSwiYXV0aGVudGljYXRpb25UeXBlIjoic2NvcGVkS2V5Iiwic2NvcGVkS2V5S2V5IjoiOTNkODRhODEyNTRmNWEzNDA1YTkiLCJzY29wZWRLZXlTZWNyZXQiOiI5MjFlNGY0MGU3Y2QwOWY2ZmVmYzk4OWRkYzE5MGEzNTVkNTg1MzA4Zjc0NzQwNzYwODBhMGJkYWQ0ZjA1NTdjIiwiaWF0IjoxNzEzMjYwMjM3fQ.HTHPkfcYP2tKxMGrh7tQrUmMUqzGahQfZJcOdTUWmPY";
+
+  // const handleSubmission = async (e) => {
+  //   e.preventDefault();
+  //   try {
+  //     const folder = "report_side_effects"; // Specify the folder name
+
+  //     const json = {
+  //       medicineId,
+  //       age,
+  //       gender,
+  //       location,
+  //       sideEffectsDescription,
+  //       pastDiseases,
+  //     };
+
+  //     const blob = new Blob([JSON.stringify(json, null, 2)], {
+  //       type: "application/json",
+  //     });
+  //     const file = new File([blob], "report.json", {
+  //       type: "application/json",
+  //     });
+
+  //     const formData = new FormData();
+  //     formData.append("file", file, `${folder}/report.json`);
+
+  //     const pinataMetadata = JSON.stringify({ name: `${folder}` });
+  //     console.log(pinataMetadata);
+  //     formData.append("pinataMetadata", pinataMetadata);
+
+  //     const res = await fetch(
+  //       "https://api.pinata.cloud/pinning/pinFileToIPFS",
+  //       {
+  //         method: "POST",
+  //         headers: {
+  //           Authorization: `Bearer ${jwt}`,
+  //         },
+  //         body: formData,
+  //       }
+  //     );
+
+  //     const resData = await res.json();
+  //     console.log(resData);
+
+  //     //  you can call your blockchain function here
+
+  //     // Store IPFS hash in blockchain
+  //     const contract = new web3.eth.Contract(
+  //       SupplyChain.abi,
+  //       "0xEd2f4d104A9f91ccD4dA9380Ac3f0c5f48EBBf45"
+  //     );
+  //     const ipfsHash = resData.IpfsHash; // Assuming IpfsHash is the key in your resData JSON
+  //     const accounts = await web3.eth.getAccounts();
+  //     await contract.methods
+  //       .storeIPFSHash(ipfsHash)
+  //       .send({ from: accounts[0] });
+
+  //     // Reset form fields
+  //     setMedicineId("");
+  //     setAge("");
+  //     setGender("");
+  //     setLocation("");
+  //     setSideEffectsDescription("");
+  //     setPastDiseases("");
+  //   } catch (error) {
+  //     console.error("Error sending file to IPFS:", error);
+  //   }
+  // };
 
   const handleSubmission = async (e) => {
     e.preventDefault();
@@ -473,7 +540,20 @@ export default function ReportSideEffects({ account, supplyChain, web3 }) {
       const resData = await res.json();
       console.log(resData);
 
-      // Optionally, you can call your blockchain function here
+      // Store IPFS hash in blockchain
+      const contract = new web3.eth.Contract(
+        SupplyChain.abi,
+        "0x4668b365cD3CEf8824AF47F9D02Ea7dB282f96a7"
+      );
+      const ipfsHash = resData.IpfsHash; // Assuming IpfsHash is the key in your resData JSON
+      const accounts = await web3.eth.getAccounts();
+      await contract.methods
+        .storeIPFSHash(ipfsHash)
+        .send({ from: accounts[0] });
+
+      // Retrieve all stored IPFS hashes
+      const allHashes = await contract.methods.getAllIPFSHashes().call();
+      console.log("All IPFS Hashes:", allHashes);
 
       // Reset form fields
       setMedicineId("");

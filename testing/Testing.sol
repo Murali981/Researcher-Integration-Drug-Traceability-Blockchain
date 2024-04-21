@@ -3,18 +3,15 @@ pragma solidity >=0.4.21 <0.7.0;
 pragma experimental ABIEncoderV2;
 
 import './RawMaterial.sol';
-// import './Supplier.sol';
-// import './Transporter.sol';
 import './Medicine.sol';
-// import './Manufacturer.sol';
-import './MedicineW_D.sol';
-// import './Wholesaler.sol';
-import './MedicineD_C.sol';
-// import './Distributor.sol';
 
-// import './Customer.sol';
-// import './SideEffectsContract.sol';
-// import './ResearcherContract.sol';
+import './MedicineW_D.sol';
+
+import './MedicineD_C.sol';
+
+
+
+
 
 
 
@@ -24,8 +21,7 @@ contract SupplyChain {
     
     address Owner;
 
-    // SideEffectsContract public sideEffectsContract;
-    // ResearcherContract public researcherContract;
+  
     
     constructor() public {
         Owner = msg.sender;
@@ -52,27 +48,7 @@ contract SupplyChain {
         Researcher
     }
 
-    // address addressSide;
-
-    // function setAddress(address _addressSide) external {
-    //     addressSide = _addressSide;
-    // }
-
-    // function reportSideEffects(uint _medicineId,
-    //     uint _age,
-    //     string memory _gender,
-    //     string memory _location,
-    //     string memory _sideEffectsDescription,
-    //     string memory _pastDiseases) external {}
-
     
-
-    // constructor() public {
-    //     sideEffectsContract = new SideEffectsContract();
-    //     researcherContract = new ResearcherContract();
-    // }
-
-
       
     
     //////////////// Events ////////////////////
@@ -82,16 +58,7 @@ contract SupplyChain {
     event respondEvent(address indexed buyer, address seller, address packageAddr, bytes signature, uint indexed timestamp);
     event sendEvent(address seller, address buyer, address indexed packageAddr, bytes signature, uint indexed timestamp);
     event receivedEvent(address indexed buyer, address seller, address packageAddr, bytes signature, uint indexed timestamp);
-    // event SideEffectsReported(
-    //     address indexed PatientAddress,
-    //     uint indexed MedicineId,
-    //     uint Age,
-    //     string Gender,
-    //     string Location,
-    //     string SideEffectsDescription,
-    //     string PastDiseases
-    // );
-    
+   
     
     //////////////// Event functions (All entities) ////////////////////
 
@@ -118,6 +85,12 @@ contract SupplyChain {
     }
     
     mapping (address => userData) public userInfo;
+
+       // Modifier to check if the caller is a registered researcher
+    modifier onlyResearcher() {
+        require(userInfo[msg.sender].role == roles.Researcher, "Only authorized researchers can access this function");
+        _;
+    }
     
     function registerUser(bytes32 name, string[] memory loc, uint role, address _userAddr) public onlyOwner {
         userInfo[_userAddr].name = name;
@@ -127,7 +100,54 @@ contract SupplyChain {
         
         emit UserRegister(_userAddr, name);
     }
+
+///////////////// Storing all the side effects in the ipfs and the generated ipfs  hashes are stored on the blockchain
+
+
+   string[] public ipfsHashes; // Array to store IPFS hashes
+
+    // Event to log IPFS hash storage
+    event IPFSHashStored(string ipfsHash);
+
+    // Function to store IPFS hash
+    function storeIPFSHash(string memory hash) public {
+        ipfsHashes.push(hash); // Push the hash to the array
+        emit IPFSHashStored(hash); // Emit event to log the stored hash
+    }
+
+    // Function to retrieve all stored IPFS hashes
+    function getAllIPFSHashes() public view returns (string[] memory) {
+        return ipfsHashes; // Return the array of IPFS hashes
+    }
+
+
+    ///////////////// Storing all the  Manufacturer logs  in the ipfs and the generated ipfs  hashes are stored on the blockchain
+
     
+  string[] public mLogs; // Array to store IPFS hashes
+
+    // Event to log IPFS hash storage
+    event mLogStored(string mLog);
+
+    // Function to store IPFS hash
+    function storeMLogs(string memory hash) public {
+        mLogs.push(hash); // Push the hash to the array
+        emit mLogStored(hash); // Emit event to log the stored hash
+    }
+
+    // Function to retrieve all stored IPFS hashes
+    function getAllMLogs() public view returns (string[] memory) {
+        return mLogs; // Return the array of IPFS hashes
+    }
+
+   ///// Function to get all the ipfs hashes only by the authorized researcher
+
+   // Function to retrieve all stored IPFS hashes
+    function getAllIPFSHash() public view onlyResearcher returns (string[] memory) {
+        return ipfsHashes; // Return the array of IPFS hashes
+    }
+
+ 
     // function changeUserRole(uint _role, address _addr) public onlyOwner returns(string memory) {
     //     userInfo[_addr].role = roles(_role);
     //    return "Role Updated!";
@@ -213,43 +233,10 @@ contract SupplyChain {
     }
     
     
-    ///////////////  Manufacturer ///////////////
-//   struct MedicineProductionLog {
-//         uint medicineId;
-//         string medicineDescription; // Added medicine description
-//         uint quantityProduced;
-//         uint rawMaterialId;
-//         string rawMaterialDescription; // Added raw material description
-//         string qualityAssuranceReports; // Added quality assurance reports
-//         string testResults; // Added test results
-//         string manufacturerInfo; // Added manufacturer information
-//         string transactionLogs; // Added transaction logs
-//         // Additional relevant details
-//     }
-
-    
     mapping (address => address[]) public manufacturerRawMaterials;
     mapping (address => address[]) public manufacturerMedicines;
 
-//    // Mapping to store Medicine Production Logs
-//     mapping(uint => MedicineProductionLog) public medicineProductionLogs;
-//     uint public totalProductionLogs;
-
-
-   // Event for Medicine Production Log
-    event MedicineProductionLogged(
-        uint medicineId,
-        string medicineDescription, // Added medicine description
-        uint quantityProduced,
-        uint rawMaterialId,
-        string rawMaterialDescription, // Added raw material description
-        string qualityAssuranceReports, // Added quality assurance reports
-        string testResults, // Added test results
-        string manufacturerInfo, // Added manufacturer information
-        string transactionLogs // Added transaction logs
-        // Additional relevant details can be added here
-    );
-    
+//
     function manufacturerReceivedPackage(
         address _addr,
         address _manufacturerAddress,
@@ -300,51 +287,7 @@ contract SupplyChain {
         return ret;
     }
 
-//    // Function to submit Medicine Production Log
-//     function submitMedicineProductionLog(
-//         uint _medicineId,
-//         string memory _medicineDescription,
-//         uint _quantityProduced,
-//         uint _rawMaterialId,
-//         string memory _rawMaterialDescription,
-//         string memory _qualityAssuranceReports,
-//         string memory _testResults,
-//         string memory _manufacturerInfo,
-//         string memory _transactionLogs
-//     ) public {
-//         require(
-//             userInfo[msg.sender].role == roles.manufacturer,
-//             "Only Manufacturer can call this function"
-//         );
-
-//         totalProductionLogs++;
-//         medicineProductionLogs[totalProductionLogs] = MedicineProductionLog({
-//             medicineId: _medicineId,
-//             medicineDescription: _medicineDescription,
-//             quantityProduced: _quantityProduced,
-//             rawMaterialId: _rawMaterialId,
-//             rawMaterialDescription: _rawMaterialDescription,
-//             qualityAssuranceReports: _qualityAssuranceReports,
-//             testResults: _testResults,
-//             manufacturerInfo: _manufacturerInfo,
-//             transactionLogs: _transactionLogs
-//             // Additional relevant details can be added here
-//         });
-
-//         // Emit an event for the production log
-//         emit MedicineProductionLogged(
-//             _medicineId,
-//             _medicineDescription,
-//             _quantityProduced,
-//             _rawMaterialId,
-//             _rawMaterialDescription,
-//             _qualityAssuranceReports,
-//             _testResults,
-//             _manufacturerInfo,
-//             _transactionLogs
-//             // Additional relevant details can be added here
-//         );
-//     }
+//  
     
 
     ///////////////  Wholesaler  ///////////////
@@ -384,27 +327,19 @@ contract SupplyChain {
         MedicineWtoDTxContract[_address] = address(wd);
     }
 
-    
-    // function getBatchIdByIndexWD(uint index) public view returns(address packageID) {
-    //     require(
-    //         userInfo[msg.sender].role == roles.wholesaler,
-    //         "Only Wholesaler Can call this function."
-    //     );
-    //     return MedicineWtoD[msg.sender][index];
+   
+    // function getSubContractWD(address _address) public view returns (address SubContractWD) {
+    //     return MedicineWtoDTxContract[_address];
     // }
-
-    function getSubContractWD(address _address) public view returns (address SubContractWD) {
-        return MedicineWtoDTxContract[_address];
-    }
     
-    function getAllMedicinesAtWholesaler() public view returns(address[] memory) {
-        uint len = MedicinesAtWholesaler[msg.sender].length;
-        address[] memory ret = new address[](len);
-        for (uint i = 0; i < len; i++) {
-            ret[i] = MedicinesAtWholesaler[msg.sender][i];
-        }
-        return ret;
-    }
+    // function getAllMedicinesAtWholesaler() public view returns(address[] memory) {
+    //     uint len = MedicinesAtWholesaler[msg.sender].length;
+    //     address[] memory ret = new address[](len);
+    //     for (uint i = 0; i < len; i++) {
+    //         ret[i] = MedicinesAtWholesaler[msg.sender][i];
+    //     }
+    //     return ret;
+    // }
 
 
 //     ///////////////  Distributor  ///////////////
@@ -436,54 +371,54 @@ contract SupplyChain {
         emit receivedEvent(msg.sender, _sellerAddr, _address, signature, now);
     }
 
-    function distributorTransferMedicinetoCustomer(
-        address _address,
-        address transporter,
-        address receiver
-    ) public {
-        require(
-            userInfo[msg.sender].role == roles.distributor &&
-            msg.sender == Medicine(_address).getWDC()[1],
-            "Only Distributor or current owner of package can call this function"
-        );
-        MedicineD_C dp = new MedicineD_C(
-            _address,
-            msg.sender,
-            transporter,
-            receiver
-        );
-        MedicineDtoC[msg.sender].push(address(dp));
-        MedicineDtoCTxContract[_address] = address(dp);
-    }
+    // function distributorTransferMedicinetoCustomer(
+    //     address _address,
+    //     address transporter,
+    //     address receiver
+    // ) public {
+    //     require(
+    //         userInfo[msg.sender].role == roles.distributor &&
+    //         msg.sender == Medicine(_address).getWDC()[1],
+    //         "Only Distributor or current owner of package can call this function"
+    //     );
+    //     MedicineD_C dp = new MedicineD_C(
+    //         _address,
+    //         msg.sender,
+    //         transporter,
+    //         receiver
+    //     );
+    //     MedicineDtoC[msg.sender].push(address(dp));
+    //     MedicineDtoCTxContract[_address] = address(dp);
+    // }
     
-    function getBatchesCountDC() public view returns (uint count){
-        require(
-            userInfo[msg.sender].role == roles.distributor,
-            "Only Distributor Can call this function."
-        );
-        return MedicineDtoC[msg.sender].length;
-    }
+    // function getBatchesCountDC() public view returns (uint count){
+    //     require(
+    //         userInfo[msg.sender].role == roles.distributor,
+    //         "Only Distributor Can call this function."
+    //     );
+    //     return MedicineDtoC[msg.sender].length;
+    // }
 
-    function getBatchIdByIndexDC(uint index) public view returns(address packageID) {
-        require(
-            userInfo[msg.sender].role == roles.distributor,
-            "Only Distributor Can call this function."
-        );
-        return MedicineDtoC[msg.sender][index];
-    }
+    // function getBatchIdByIndexDC(uint index) public view returns(address packageID) {
+    //     require(
+    //         userInfo[msg.sender].role == roles.distributor,
+    //         "Only Distributor Can call this function."
+    //     );
+    //     return MedicineDtoC[msg.sender][index];
+    // }
 
-    function getSubContractDC(address _address) public view returns (address SubContractDP) {
-        return MedicineDtoCTxContract[_address];
-    }
+    // function getSubContractDC(address _address) public view returns (address SubContractDP) {
+    //     return MedicineDtoCTxContract[_address];
+    // }
     
-    function getAllMedicinesAtDistributor() public view returns(address[] memory) {
-        uint len = MedicinesAtDistributor[msg.sender].length;
-        address[] memory ret = new address[](len);
-        for (uint i = 0; i < len; i++) {
-            ret[i] = MedicinesAtDistributor[msg.sender][i];
-        }
-        return ret;
-    }
+    // function getAllMedicinesAtDistributor() public view returns(address[] memory) {
+    //     uint len = MedicinesAtDistributor[msg.sender].length;
+    //     address[] memory ret = new address[](len);
+    //     for (uint i = 0; i < len; i++) {
+    //         ret[i] = MedicinesAtDistributor[msg.sender][i];
+    //     }
+    //     return ret;
+    // }
     
     
 //     ///////////////  Customer  ///////////////
@@ -540,127 +475,6 @@ contract SupplyChain {
 //         );
 //         return MedicineBatchAtCustomer[msg.sender][index];
 //     }
-
-   ///// Patients Reporting side effects function ////////
-
-//     struct SideEffectsReport {
-//     address patientAddress;
-//     uint medicineId;
-//     uint age;
-//     string gender;
-//     string location;
-//     string sideEffectsDescription;
-//     string pastDiseases;
-// }
- 
-//   mapping(uint => SideEffectsReport) public sideEffectsReports;
-//   uint public totalReports;
-
-//  function reportSideEffects(
-//     uint _medicineId,
-//     uint _age,
-//     string memory _gender,
-//     string memory _location,
-//     string memory _sideEffectsDescription,
-//     string memory _pastDiseases
-// ) public {
-//     totalReports++;
-//     sideEffectsReports[totalReports] = SideEffectsReport({
-//         patientAddress: msg.sender,
-//         medicineId: _medicineId,
-//         age: _age,
-//         gender: _gender,
-//         location: _location,
-//         sideEffectsDescription: _sideEffectsDescription,
-//         pastDiseases: _pastDiseases
-//     });
-
-//     emit SideEffectsReported(
-//         msg.sender,
-//         _medicineId,
-//         _age,
-//         _gender,
-//         _location,
-//         _sideEffectsDescription,
-//         _pastDiseases
-//     );
-// }
-
-
-    ////// Researcher accessing functions in the smart contract /////////////
- 
-//   function getSideEffectsReports() public view returns (SideEffectsReport[] memory) {
-
-//    require(
-//             userInfo[msg.sender].role == roles.Researcher,
-//             "Only Researcher can call this function"
-//         );
-
-//     SideEffectsReport[] memory reports = new SideEffectsReport[](totalReports);
-
-//     for (uint i = 1; i <= totalReports; i++) {
-//         reports[i - 1] = sideEffectsReports[i];
-//     }
-
-//     return reports;
-// }
-
-// function getTotalReports() public view returns (uint) {
-//     return totalReports;
-// }
-
-// function getSideEffectsReports() public view  returns (SideEffectsReport[] memory) {
-//     SideEffectsReport[] memory reports = new SideEffectsReport[](totalReports);
-
-//     for (uint i = 1; i <= totalReports; i++) {
-//         reports[i - 1] = sideEffectsReports[i];
-//     }
-
-//     return reports;
-// }
-
-// function getTotalReports() public view  returns (uint) {
-//     return totalReports;
-// }
-
-
-//    function getMedicineDetails(address medicineAddress) public view returns (
-//         bytes32 description,
-//         address[] memory rawMaterials,
-//         address[] memory transporters,
-//         address manufacturer,
-//         address wholesaler,
-//         address distributor,
-//         uint quantity,
-//         uint status,
-//         address txnContractAddress
-//     ) {
-//         Medicine medicine = Medicine(medicineAddress);
-//         (
-//             manufacturer,
-//             description,
-//             rawMaterials,
-//             quantity,
-//             transporters,
-//             distributor,
-//             status,
-//             txnContractAddress,
-//             wholesaler
-//         ) = medicine.getMedicineInfo();
-//     }
-
-
-
-
-
-
-
-
-
-
-
-
-
 
     function verify(address p, bytes32 hash, uint8 v, bytes32 r, bytes32 s) public pure returns(bool) {
         return ecrecover(hash, v, r, s) == p;
