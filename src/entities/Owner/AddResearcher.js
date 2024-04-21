@@ -90,6 +90,60 @@ function AddResearcher(props) {
     return <Loader></Loader>;
   }
 
+  // return (
+  //   <Container component="main" maxWidth="xs">
+  //     <CssBaseline />
+  //     <div className={classes.paper}>
+  //       <Avatar className={classes.avatar}>
+  //         <PersonAddIcon />
+  //       </Avatar>
+  //       <Typography component="h1" variant="h5">
+  //         Add Researcher
+  //       </Typography>
+  //       <form className={classes.root} noValidate autoComplete="on">
+  //         <TextField
+  //           id="name"
+  //           label="Name"
+  //           variant="outlined"
+  //           onChange={handleInputChange}
+  //         />
+  //         <br></br>
+  //         <TextField
+  //           id="location"
+  //           label="Location"
+  //           variant="outlined"
+  //           onChange={handleInputChange}
+  //         />
+  //         <br></br>
+  //         {/* <TextField
+  //           id="locationy"
+  //           label="Locationy"
+  //           variant="outlined"
+  //           onChange={handleInputChange}
+  //         />
+  //         <br></br> */}
+  //         <TextField
+  //           id="role"
+  //           label="Role"
+  //           variant="outlined"
+  //           onChange={handleInputChange}
+  //         />
+  //         <br></br>
+  //         <TextField
+  //           id="address"
+  //           label="Account"
+  //           variant="outlined"
+  //           onChange={handleInputChange}
+  //         />
+  //         <br></br>
+  //         <Button variant="contained" color="primary" onClick={handleSubmit}>
+  //           Submit
+  //         </Button>
+  //       </form>
+  //     </div>
+  //   </Container>
+  // );
+
   return (
     <Container component="main" maxWidth="xs">
       <CssBaseline />
@@ -98,46 +152,60 @@ function AddResearcher(props) {
           <PersonAddIcon />
         </Avatar>
         <Typography component="h1" variant="h5">
-          Add New User
+          Register Researcher
         </Typography>
         <form className={classes.root} noValidate autoComplete="on">
           <TextField
-            id="name"
-            label="Name"
+            id="fullName"
+            label="Full Name"
             variant="outlined"
             onChange={handleInputChange}
           />
-          <br></br>
+          <br />
           <TextField
-            id="locationx"
-            label="Locationx"
+            id="institution"
+            label="Institution/Organization"
             variant="outlined"
             onChange={handleInputChange}
           />
-          <br></br>
+          <br />
           <TextField
-            id="locationy"
-            label="Locationy"
+            id="email"
+            label="Email Address"
             variant="outlined"
             onChange={handleInputChange}
           />
-          <br></br>
+          <br />
           <TextField
-            id="role"
-            label="Role"
+            id="researchArea"
+            label="Research Area/Domain"
             variant="outlined"
             onChange={handleInputChange}
           />
-          <br></br>
+          <br />
           <TextField
-            id="address"
-            label="Account"
+            id="qualifications"
+            label="Highest Qualification"
             variant="outlined"
             onChange={handleInputChange}
           />
-          <br></br>
+          <br />
+          <TextField
+            id="experience"
+            label="Years of Experience"
+            variant="outlined"
+            onChange={handleInputChange}
+          />
+          <br />
+          <TextField
+            id="walletAddress"
+            label="Blockchain Wallet Address"
+            variant="outlined"
+            onChange={handleInputChange}
+          />
+          <br />
           <Button variant="contained" color="primary" onClick={handleSubmit}>
-            Submit
+            Register
           </Button>
         </form>
       </div>
