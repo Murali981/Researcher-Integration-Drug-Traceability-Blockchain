@@ -74,6 +74,46 @@ contract SupplyChain {
     function sendPackageToEntity(address buyer, address seller, address packageAddr, bytes memory signature) public {
         emit sendEvent(seller, buyer, packageAddr, signature, now);
     }
+
+    /////// Registering a researcher //////////////////////
+    struct researcherData {
+        bytes32 name;
+        bytes32 institution;
+        bytes32 email;
+        bytes32 researchArea;
+        bytes32 qualifications;
+        bytes32 experience;
+        roles role;
+        address walletAddress;
+    }
+
+    mapping (address => researcherData) public researcherInfo;
+
+    uint counter = 0;
+
+
+    function registerResearcher(
+    bytes32 name,
+    bytes32 institution,
+    bytes32 email,
+    bytes32 researchArea,
+    bytes32 qualifications,
+    bytes32 experience,
+    uint role,
+    address walletAddress
+) public onlyOwner {
+    researcherInfo[msg.sender].name = name;
+    researcherInfo[msg.sender].institution = institution;
+    researcherInfo[msg.sender].email = email;
+    researcherInfo[msg.sender].researchArea = researchArea;
+    researcherInfo[msg.sender].qualifications = qualifications;
+    researcherInfo[msg.sender].experience = experience;
+    researcherInfo[msg.sender].role = roles(role);
+    researcherInfo[msg.sender].walletAddress = walletAddress;
+
+    emit UserRegister(msg.sender, name);
+}
+
     
     /////////////// Users (Only Owner Executable) //////////////////////
     
@@ -88,7 +128,7 @@ contract SupplyChain {
 
        // Modifier to check if the caller is a registered researcher
     modifier onlyResearcher() {
-        require(userInfo[msg.sender].role == roles.Researcher, "Only authorized researchers can access this function");
+        require(researcherInfo[msg.sender].role == roles.Researcher, "Only authorized researchers can access this function");
         _;
     }
     
@@ -116,7 +156,8 @@ contract SupplyChain {
     }
 
     // Function to retrieve all stored IPFS hashes
-    function getAllIPFSHashes() public view returns (string[] memory) {
+    function getAllIPFSHashes() public returns (string[] memory) {
+        counter = counter + 1;
         return ipfsHashes; // Return the array of IPFS hashes
     }
 
@@ -143,7 +184,8 @@ contract SupplyChain {
    ///// Function to get all the ipfs hashes only by the authorized researcher
 
    // Function to retrieve all stored IPFS hashes
-    function getAllIPFSHash() public view onlyResearcher returns (string[] memory) {
+    function getAllIPFSHash() public  onlyResearcher returns (string[] memory) {
+        counter = counter + 1;
         return ipfsHashes; // Return the array of IPFS hashes
     }
 

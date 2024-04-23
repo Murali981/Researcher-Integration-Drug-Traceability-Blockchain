@@ -39,26 +39,42 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-function AddResearcher(props) {
+export default function AddResearcher(props) {
+  console.log("Its working");
+  console.log(props);
+  console.log(props.account);
+  console.log("Try");
   const classes = useStyles();
-  const [name, setName] = useState("");
-  const [locationx, setLocationX] = useState("");
-  const [locationy, setLocationY] = useState("");
+  const [account] = useState(props.account);
+  const [web3, setWeb3] = useState(props.web3);
+  const [supplyChain] = useState(props.supplyChain);
+  const [fullName, setFullName] = useState("");
+  const [institution, setInstitution] = useState("");
+  const [email, setEmail] = useState("");
+  const [researchArea, setResearchArea] = useState("");
+  const [qualifications, setQualifications] = useState("");
+  const [experience, setExperience] = useState("");
   const [role, setRole] = useState("");
-  const [address, setAddress] = useState("");
+  const [walletAddress, setWalletAddress] = useState("");
   const [loading, setLoading] = useState(false);
 
   const handleInputChange = (e) => {
-    if (e.target.id === "name") {
-      setName(e.target.value);
-    } else if (e.target.id === "locationx") {
-      setLocationX(e.target.value);
-    } else if (e.target.id === "locationy") {
-      setLocationY(e.target.value);
+    if (e.target.id === "fullName") {
+      setFullName(e.target.value);
+    } else if (e.target.id === "institution") {
+      setInstitution(e.target.value);
+    } else if (e.target.id === "email") {
+      setEmail(e.target.value);
+    } else if (e.target.id === "researchArea") {
+      setResearchArea(e.target.value);
+    } else if (e.target.id === "qualifications") {
+      setQualifications(e.target.value);
+    } else if (e.target.id === "experience") {
+      setExperience(e.target.value);
     } else if (e.target.id === "role") {
       setRole(e.target.value);
-    } else if (e.target.id === "address") {
-      setAddress(e.target.value);
+    } else if (e.target.id === "walletAddress") {
+      setWalletAddress(e.target.value);
     }
   };
 
@@ -66,83 +82,52 @@ function AddResearcher(props) {
     e.preventDefault();
     setLoading(true);
     try {
-      const response = await axios.post(
-        "http://localhost:5000/registerResearcher",
-        {
-          name,
-          locationx,
-          locationy,
-          role,
-          address,
-        }
+      const nameBytes32 = web3.utils.padRight(
+        web3.utils.fromAscii(fullName),
+        64
       );
-      console.log(response.data);
+      const institutionBytes32 = web3.utils.padRight(
+        web3.utils.fromAscii(institution),
+        64
+      );
+      const emailBytes32 = web3.utils.padRight(web3.utils.fromAscii(email), 64);
+      const researchAreaBytes32 = web3.utils.padRight(
+        web3.utils.fromAscii(researchArea),
+        64
+      );
+      const qualificationsBytes32 = web3.utils.padRight(
+        web3.utils.fromAscii(qualifications),
+        64
+      );
+      const experienceBytes32 = web3.utils.padRight(
+        web3.utils.fromAscii(experience),
+        64
+      );
+
+      await supplyChain.methods
+        .registerResearcher(
+          nameBytes32,
+          institutionBytes32,
+          emailBytes32,
+          researchAreaBytes32,
+          qualificationsBytes32,
+          experienceBytes32,
+          7,
+          walletAddress
+        )
+        .send({ from: account });
+
+      console.log("Researcher registered successfully!");
       setLoading(false);
-      // Handle success, maybe show a success message to the user
     } catch (error) {
-      console.error(error);
+      console.error("Error registering researcher:", error);
       setLoading(false);
-      // Handle error, maybe show an error message to the user
     }
   };
 
   if (loading) {
     return <Loader></Loader>;
   }
-
-  // return (
-  //   <Container component="main" maxWidth="xs">
-  //     <CssBaseline />
-  //     <div className={classes.paper}>
-  //       <Avatar className={classes.avatar}>
-  //         <PersonAddIcon />
-  //       </Avatar>
-  //       <Typography component="h1" variant="h5">
-  //         Add Researcher
-  //       </Typography>
-  //       <form className={classes.root} noValidate autoComplete="on">
-  //         <TextField
-  //           id="name"
-  //           label="Name"
-  //           variant="outlined"
-  //           onChange={handleInputChange}
-  //         />
-  //         <br></br>
-  //         <TextField
-  //           id="location"
-  //           label="Location"
-  //           variant="outlined"
-  //           onChange={handleInputChange}
-  //         />
-  //         <br></br>
-  //         {/* <TextField
-  //           id="locationy"
-  //           label="Locationy"
-  //           variant="outlined"
-  //           onChange={handleInputChange}
-  //         />
-  //         <br></br> */}
-  //         <TextField
-  //           id="role"
-  //           label="Role"
-  //           variant="outlined"
-  //           onChange={handleInputChange}
-  //         />
-  //         <br></br>
-  //         <TextField
-  //           id="address"
-  //           label="Account"
-  //           variant="outlined"
-  //           onChange={handleInputChange}
-  //         />
-  //         <br></br>
-  //         <Button variant="contained" color="primary" onClick={handleSubmit}>
-  //           Submit
-  //         </Button>
-  //       </form>
-  //     </div>
-  //   </Container>
-  // );
 
   return (
     <Container component="main" maxWidth="xs">
@@ -198,6 +183,13 @@ function AddResearcher(props) {
           />
           <br />
           <TextField
+            id="role"
+            label="Role"
+            variant="outlined"
+            onChange={handleInputChange}
+          />
+          <br />
+          <TextField
             id="walletAddress"
             label="Blockchain Wallet Address"
             variant="outlined"
@@ -212,5 +204,3 @@ function AddResearcher(props) {
     </Container>
   );
 }
-
-export default AddResearcher;

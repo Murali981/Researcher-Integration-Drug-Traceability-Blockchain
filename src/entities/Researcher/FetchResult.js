@@ -164,7 +164,7 @@ import React from "react";
 const FetchResult = () => {
   return (
     <div className="result-container">
-      <h1>Researcher Results</h1>
+      <h1>Researcher Dashboard</h1>
       <div>
         <b>On March 1, 2024</b>
         <p>

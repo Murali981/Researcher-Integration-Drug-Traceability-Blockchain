@@ -543,7 +543,7 @@ export default function ReportSideEffects({ account, supplyChain, web3 }) {
       // Store IPFS hash in blockchain
       const contract = new web3.eth.Contract(
         SupplyChain.abi,
-        "0x4668b365cD3CEf8824AF47F9D02Ea7dB282f96a7"
+        "0x1EbEe3491cC2A165673E87755Da72EE5a642BdE5"
       );
       const ipfsHash = resData.IpfsHash; // Assuming IpfsHash is the key in your resData JSON
       const accounts = await web3.eth.getAccounts();
