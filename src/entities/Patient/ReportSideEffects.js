@@ -543,7 +543,7 @@ export default function ReportSideEffects({ account, supplyChain, web3 }) {
       // Store IPFS hash in blockchain
       const contract = new web3.eth.Contract(
         SupplyChain.abi,
-        "0x1EbEe3491cC2A165673E87755Da72EE5a642BdE5"
+        "0x41592d255eEaA94189F021c33790E9394c781139"
       );
       const ipfsHash = resData.IpfsHash; // Assuming IpfsHash is the key in your resData JSON
       const accounts = await web3.eth.getAccounts();
@@ -551,9 +551,9 @@ export default function ReportSideEffects({ account, supplyChain, web3 }) {
         .storeIPFSHash(ipfsHash)
         .send({ from: accounts[0] });
 
-      // Retrieve all stored IPFS hashes
-      const allHashes = await contract.methods.getAllIPFSHashes().call();
-      console.log("All IPFS Hashes:", allHashes);
+      // // Retrieve all stored IPFS hashes
+      // const allHashes = await contract.methods.getAllIPFSHashes().call();
+      // console.log("All IPFS Hashes:", allHashes);
 
       // Reset form fields
       setMedicineId("");

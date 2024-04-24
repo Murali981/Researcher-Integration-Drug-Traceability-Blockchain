@@ -112,7 +112,7 @@ export default function AddResearcher(props) {
           researchAreaBytes32,
           qualificationsBytes32,
           experienceBytes32,
-          7,
+          role,
           walletAddress
         )
         .send({ from: account });

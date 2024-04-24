@@ -240,20 +240,47 @@ const ReportText = styled.p`
 const GetPatientSideEffects = ({ account, supplyChain, web3 }) => {
   const [ipfsHashes, setIpfsHashes] = useState([]);
 
+  // useEffect(() => {
+  //   const fetchData = async () => {
+  //     try {
+  //       // Call the smart contract function to get all IPFS hashes
+  //       const contract = new web3.eth.Contract(
+  //         SupplyChain.abi,
+  //         "0x481647f56B8C80F22edbDa90f431a711327c90D0"
+  //       );
+
+  //       const accounts = await web3.eth.getAccounts();
+  //       console.log(accounts[0]);
+  //       const allHashes = await contract.methods
+  //         .getAllIPFSHashes()
+  //         .send({ from: accounts[0] });
+  //       console.log("All IPFS Hashes:", allHashes);
+  //       setIpfsHashes(allHashes);
+  //     } catch (error) {
+  //       console.error("Error fetching IPFS hashes:", error);
+  //     }
+  //   };
+
+  //   fetchData();
+  // }, []);
+
   useEffect(() => {
     const fetchData = async () => {
       try {
         // Call the smart contract function to get all IPFS hashes
         const contract = new web3.eth.Contract(
           SupplyChain.abi,
-          "0x1EbEe3491cC2A165673E87755Da72EE5a642BdE5"
+          "0x41592d255eEaA94189F021c33790E9394c781139"
         );
 
         const accounts = await web3.eth.getAccounts();
         console.log(accounts[0]);
+
+        // Use call() instead of send()
         const allHashes = await contract.methods
-          .getAllIPFSHash()
-          .send({ from: accounts[0] });
+          .getAllIPFSHashes()
+          .call({ from: accounts[0] });
+
         console.log("All IPFS Hashes:", allHashes);
         setIpfsHashes(allHashes);
       } catch (error) {
@@ -262,7 +289,7 @@ const GetPatientSideEffects = ({ account, supplyChain, web3 }) => {
     };
 
     fetchData();
-  }, [web3.eth.Contract]);
+  }, []);
 
   return (
     <ReportsContainer>
