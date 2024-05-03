@@ -264,21 +264,72 @@ const GetPatientSideEffects = ({ account, supplyChain, web3 }) => {
   //   fetchData();
   // }, []);
 
+  // useEffect(() => {
+  //   const fetchData = async () => {
+  //     try {
+  //       // Call the smart contract function to get all IPFS hashes
+  //       const contract = new web3.eth.Contract(
+  //         SupplyChain.abi,
+  //         "0x1FF59D33689fF46A3d8cbB0dAdA1015eccf92F89"
+  //       );
+
+  //       const accounts = await web3.eth.getAccounts();
+  //       console.log(accounts[0]);
+
+  //       // Sign the message with the researcher's private key
+  //       const messageHash = web3.utils.keccak256(
+  //         web3.utils.encodePacked(
+  //           0x22196e3a193b7248603a1da62d9995ee397b199294964de9e3fec78526a3a4ce,
+  //           "AccessRequest"
+  //         )
+  //       );
+  //       const signature = await web3.eth.sign(messageHash, accounts[0]);
+
+  //       // Use call() instead of send()
+  //       const allHashes = await contract.methods
+  //         .getAllIPFSHashes(signature)
+  //         .call({ from: accounts[0] });
+
+  //       console.log("All IPFS Hashes:", allHashes);
+  //       setIpfsHashes(allHashes);
+  //     } catch (error) {
+  //       console.error("Error fetching IPFS hashes:", error);
+  //     }
+  //   };
+
+  //   fetchData();
+  // }, []);
+
   useEffect(() => {
     const fetchData = async () => {
       try {
         // Call the smart contract function to get all IPFS hashes
         const contract = new web3.eth.Contract(
           SupplyChain.abi,
-          "0x41592d255eEaA94189F021c33790E9394c781139"
+          "0x1FF59D33689fF46A3d8cbB0dAdA1015eccf92F89"
         );
 
         const accounts = await web3.eth.getAccounts();
         console.log(accounts[0]);
 
+        // Convert the private key to a hex string
+        const researcherPrivateKey =
+          "0xd5a8B720640c6F4866B131e89fabb8f64CDc0b56";
+        const researcherPrivateKeyHex = web3.utils.isHexStrict(
+          researcherPrivateKey
+        )
+          ? researcherPrivateKey
+          : web3.utils.toHex(researcherPrivateKey);
+
+        // Sign the message with the researcher's private key
+        const messageHash = web3.utils.keccak256(
+          web3.utils.encodePacked(researcherPrivateKeyHex, "AccessRequest")
+        );
+        const signature = await web3.eth.sign(messageHash, accounts[0]);
+
         // Use call() instead of send()
         const allHashes = await contract.methods
-          .getAllIPFSHashes()
+          .getAllIPFSHashes(signature)
           .call({ from: accounts[0] });
 
         console.log("All IPFS Hashes:", allHashes);

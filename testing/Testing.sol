@@ -181,6 +181,26 @@ contract SupplyChain {
         emit UserRegister(_userAddr, name);
     }
 
+    //// signer function to verify the researcher ////////
+    function recoverSigner(
+        bytes32 _hash,
+        bytes memory _signature
+    ) public pure returns (address) {
+        bytes32 r;
+        bytes32 s;
+        uint8 v;
+
+        // Extracting the values from the signature
+        assembly {
+            r := mload(add(_signature, 0x20))
+            s := mload(add(_signature, 0x40))
+            v := byte(0, mload(add(_signature, 0x60)))
+        }
+
+        // Recovering the signer's address
+        return ecrecover(_hash, v, r, s);
+    }
+
     ///////////////// Storing all the side effects in the ipfs and the generated ipfs  hashes are stored on the blockchain
 
     string[] public ipfsHashes; // Array to store IPFS hashes
@@ -195,11 +215,26 @@ contract SupplyChain {
     }
 
     /// Function to get all the ipfs hashes only by the authorized researcher
-    function getAllIPFSHashes()
-        public
-        onlyResearcher
-        returns (string[] memory)
-    {
+    // function getAllIPFSHashes()
+    //     public
+    //     onlyResearcher
+    //     returns (string[] memory)
+    // {
+    //     counter = counter + 1;
+    //     return ipfsHashes; // Return the array of IPFS hashes
+    // }
+
+    function getAllIPFSHashes(
+        bytes memory _signature
+    ) public returns (string[] memory) {
+        bytes32 messageHash = keccak256(
+            abi.encodePacked(msg.sender, "AccessRequest")
+        );
+        address signer = recoverSigner(messageHash, _signature);
+
+        // Verify that the signer is an authorized researcher
+        require(isResearcher[signer], "Unauthorized access");
+
         counter = counter + 1;
         return ipfsHashes; // Return the array of IPFS hashes
     }
